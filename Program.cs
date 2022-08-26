@@ -10,15 +10,36 @@ namespace PasswordGeneratorV1
 
         private static readonly Regex regex = new Regex(@"^\d+$");
         
-        private static readonly Regex regexValid = new Regex("^(?=.*[a-z])(?=."
-                       + "*[A-Z])(?=.*\\d)"
-                       + "(?=.*[-+_!@#$%^&*., ?()]).+$");
         static string Generator(int length)
         {
             bool Lower = true;
-            bool Hupper = true;
+            bool Hupper = false;
             bool Number = true;
-            bool Symbol = true;
+            bool Symbol = false;
+            
+            string pattern = "";
+
+            if (Lower)
+            {
+                pattern += "^(?=.*[a-z])";
+            }
+            
+            if (Hupper)
+            {
+                pattern += "(?=.*[A-Z])";
+            }
+            
+            if (Number)
+            {
+                pattern += "(?=.*\\d)";
+            }
+
+            if (Symbol)
+            {
+                pattern += "(?=.*[-+_!@#$%^&*., ?()]).+$";
+            }
+
+            Regex regexValid = new Regex(pattern);
 
             string Lowerletter = "abcdefhijklmnopqrstuvwxyz";
             string Hupperletter = "ABCDEFHIJKLMNOPQRSTUVWXYZ";
@@ -50,9 +71,9 @@ namespace PasswordGeneratorV1
         {
             int length = 0;
             string TempoBuffer = "";
-            Console.WriteLine("Do you want the default length(16)? (yes/no)");
+            Console.WriteLine("Do you want the default length(16)? (Y/N)");
             string choice = Console.ReadLine();
-            if (choice == "yes")
+            if (choice == "Y" || choice == "y")
             {
                 length = 16;
             }
