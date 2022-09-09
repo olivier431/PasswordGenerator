@@ -7,6 +7,7 @@ public class GeneratorGenerator
 {
     public static string Generator(int length)
             {
+                //mettre en parametre de la fonction
                 bool Lower = true;
                 bool Hupper = true;
                 bool Number = true;
