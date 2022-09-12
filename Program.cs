@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using static PasswordGenerator.AesCrypter;
 using static PasswordGenerator.GeneratorGenerator;
 
+
 namespace PasswordGenerator
 {
     class Program
@@ -50,12 +51,24 @@ namespace PasswordGenerator
             }
 
              string password = Generator(length);
-            //Encrypte(length);
-            
+
+            //Work on Json
             string fileName = "Password.json";
-            using FileStream createStream = File.Create(fileName); 
-            await JsonSerializer.SerializeAsync(createStream, password); 
-            await createStream.DisposeAsync();
+            if (!File.Exists(Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? ""))
+            {
+                using FileStream createStream = File.Create(fileName);
+                await JsonSerializer.SerializeAsync(createStream, password); 
+                await createStream.DisposeAsync();
+            }
+            else
+            {
+                using FileStream openStream = File.OpenWrite(fileName);
+                await JsonSerializer.SerializeAsync(openStream, "\n" + password); 
+                await openStream.DisposeAsync();
+            }
+
+
+
 
             //List<Password> passwords2 = JsonSerializer.Deserialize<List<Password>>(json) ?? new List<Password>();
             //Console.WriteLine(string.Join("\n", passwords2));
