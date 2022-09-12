@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Text.Json;
+using System.Text.RegularExpressions;
 using static PasswordGenerator.AesCrypter;
 using static PasswordGenerator.GeneratorGenerator;
 
@@ -6,10 +7,10 @@ namespace PasswordGenerator
 {
     class Program
     {
-
+        
         private static readonly Regex regex = new Regex(@"^\d+$");
 
-        public static void Encrypte(int length)
+        /*public static void Encrypte(int length)
         {
             AesCrypter aesCrypter = new AesCrypter("c'est ma clé");
             string path = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? "";
@@ -21,10 +22,11 @@ namespace PasswordGenerator
             string encrypted = aesCrypter.Encrypt(data);
             decrypted = aesCrypter.Decrypt(encrypted);
             Console.WriteLine($"{data} {encrypted} {decrypted}");
-        }
+        }*/
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
+        
             int length = 0;
             string TempoBuffer = "";
             Console.WriteLine("Do you want the default length(16)? (Y/N)");
@@ -47,7 +49,16 @@ namespace PasswordGenerator
                 } while (!regex.IsMatch(TempoBuffer) || (length < 8 || length > 64));
             }
 
-            Encrypte(length);
+             string password = Generator(length);
+            //Encrypte(length);
+            
+            string fileName = "Password.json";
+            using FileStream createStream = File.Create(fileName); 
+            await JsonSerializer.SerializeAsync(createStream, password); 
+            await createStream.DisposeAsync();
+
+            //List<Password> passwords2 = JsonSerializer.Deserialize<List<Password>>(json) ?? new List<Password>();
+            //Console.WriteLine(string.Join("\n", passwords2));
 
         }
         
