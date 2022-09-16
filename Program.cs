@@ -17,6 +17,7 @@ namespace PasswordGenerator
         {
             string site = "";
             string userName = "";
+            string masterPassword = "";
             bool hupper, lower, number, symbol;
             Console.WriteLine("What is your Username ?");
             userName = Console.ReadLine();
@@ -90,6 +91,9 @@ namespace PasswordGenerator
 
                 } while (!regex.IsMatch(TempoBuffer) || (length < 8 || length > 64));
             }
+            
+            Console.WriteLine("What is your masterPassword ?");
+            masterPassword = Console.ReadLine();
 
             string password = Generator(length, lower, hupper, number, symbol);
 
@@ -97,7 +101,7 @@ namespace PasswordGenerator
             
             List<Password> passwords = new List<Password>()
             {
-                new(password, "test", userName, site)
+                new(password, masterPassword, userName, site)
                
             };
 
