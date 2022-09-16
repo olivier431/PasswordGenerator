@@ -5,13 +5,9 @@ namespace PasswordGenerator;
 
 public class GeneratorGenerator
 {
-    public static string Generator(int length)
+    public static string Generator(int length, bool Lower, bool Hupper, bool Number, bool Symbol)
             {
-                //mettre en parametre de la fonction
-                bool Lower = true;
-                bool Hupper = true;
-                bool Number = true;
-                bool Symbol = true;
+               
                 
                 string pattern = "";
     

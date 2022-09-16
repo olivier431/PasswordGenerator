@@ -1,7 +1,9 @@
 ﻿using System.Text.Json;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 using static PasswordGenerator.AesCrypter;
 using static PasswordGenerator.GeneratorGenerator;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 
 namespace PasswordGenerator
@@ -13,11 +15,64 @@ namespace PasswordGenerator
 
         static async Task Main(string[] args)
         {
-        
+            string site = "";
+            string userName = "";
+            bool hupper, lower, number, symbol;
+            Console.WriteLine("What is your Username ?");
+            userName = Console.ReadLine();
+            
+            Console.WriteLine("For wich site do you want to register a password ?");
+            site = Console.ReadLine();
+            
+            Console.WriteLine("Do you want lowerLetter ?");
+            string choice = Console.ReadLine();
+            if (choice == "Y" || choice == "y")
+            {
+                lower = true;
+            }
+            else
+            {
+                lower = false;
+            }
+            
+            Console.WriteLine("Do you want hupperLetter ?");
+            choice = Console.ReadLine();
+            if (choice == "Y" || choice == "y")
+            {
+                hupper = true;
+            }
+            else
+            {
+                hupper = false;
+            }
+            
+            Console.WriteLine("Do you want number ?");
+            choice = Console.ReadLine();
+            if (choice == "Y" || choice == "y")
+            {
+                number = true;
+            }
+            else
+            {
+                number = false;
+            }
+            
+            Console.WriteLine("Do you want symbol ?");
+            choice = Console.ReadLine();
+            if (choice == "Y" || choice == "y")
+            {
+                symbol = true;
+            }
+            else
+            {
+                symbol = false;
+            }
+            
+            
             int length = 0;
             string TempoBuffer = "";
             Console.WriteLine("Do you want the default length(16)? (Y/N)");
-            string choice = Console.ReadLine();
+            choice = Console.ReadLine();
             if (choice == "Y" || choice == "y")
             {
                 length = 16;
@@ -36,31 +91,22 @@ namespace PasswordGenerator
                 } while (!regex.IsMatch(TempoBuffer) || (length < 8 || length > 64));
             }
 
-            string password = Generator(length);
+            string password = Generator(length, lower, hupper, number, symbol);
+
+            Console.WriteLine(password);
             
-            
-
-            //Work on Json
-            /*string fileName = "Password.json";
-            if (!File.Exists(Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? ""))
+            List<Password> passwords = new List<Password>()
             {
-                using FileStream createStream = File.Create(fileName);
-                await JsonSerializer.SerializeAsync(createStream, password); 
-                await createStream.DisposeAsync();
-            }
-            else
-            {
-                using FileStream openStream = File.OpenWrite(fileName);
-                await JsonSerializer.SerializeAsync(openStream, "\n" + password); 
-                await openStream.DisposeAsync();
-            }
-            */
+                new(password, "test", userName, site)
+               
+            };
 
+            JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
+            string json = JsonSerializer.Serialize(passwords, options);
+            Console.WriteLine(json);
 
-
-
-            //List<Password> passwords2 = JsonSerializer.Deserialize<List<Password>>(json) ?? new List<Password>();
-            //Console.WriteLine(string.Join("\n", passwords2));
+            passwords = JsonConvert.DeserializeObject<List<Password>>(json) ?? new List<Password>();
+            Console.WriteLine(string.Join("\n", passwords));
 
         }
         

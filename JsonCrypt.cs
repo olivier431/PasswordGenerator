@@ -8,9 +8,9 @@ public class Password
     public string Encrypted { get; set; }
     public string? Site { get; set; }
 
-    public Password(string userName, string plaintext, string key, string? site = null)
+    public Password(string plaintext, string key, string userName, string? site = null)
     {
-        Site = Site;
+        Site = site;
         UserName = userName;
         Plaintext = plaintext;
         
