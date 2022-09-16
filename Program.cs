@@ -8,22 +8,8 @@ namespace PasswordGenerator
 {
     class Program
     {
-        
+
         private static readonly Regex regex = new Regex(@"^\d+$");
-
-        /*public static void Encrypte(int length)
-        {
-            AesCrypter aesCrypter = new AesCrypter("c'est ma clé");
-            string path = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? "";
-            path = Path.Combine(path, "passwords.dat");
-            string data = Generator(length);
-            aesCrypter.EncryptToFile(data, path);
-            string decrypted = aesCrypter.DecryptFromFile(path);
-
-            string encrypted = aesCrypter.Encrypt(data);
-            decrypted = aesCrypter.Decrypt(encrypted);
-            Console.WriteLine($"{data} {encrypted} {decrypted}");
-        }*/
 
         static async Task Main(string[] args)
         {
@@ -50,10 +36,12 @@ namespace PasswordGenerator
                 } while (!regex.IsMatch(TempoBuffer) || (length < 8 || length > 64));
             }
 
-             string password = Generator(length);
+            string password = Generator(length);
+            
+            
 
             //Work on Json
-            string fileName = "Password.json";
+            /*string fileName = "Password.json";
             if (!File.Exists(Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? ""))
             {
                 using FileStream createStream = File.Create(fileName);
@@ -66,6 +54,7 @@ namespace PasswordGenerator
                 await JsonSerializer.SerializeAsync(openStream, "\n" + password); 
                 await openStream.DisposeAsync();
             }
+            */
 
 
 

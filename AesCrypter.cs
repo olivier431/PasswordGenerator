@@ -8,7 +8,7 @@ public class AesCrypter
     private Aes _aes = Aes.Create();
 
     //TODO: make the key property private?
-    public string Key
+    private string Key
     {
         get => string.Join("", _aes.Key.Select(b => $"{b:X}"));
         set => _aes.Key = SHA256.HashData(Encoding.ASCII.GetBytes(value));
