@@ -1,10 +1,12 @@
-﻿namespace PasswordGenerator;
+﻿using Newtonsoft.Json;
+
+namespace PasswordGenerator;
 
 public class Password
 {
     public string UserName { get; set; }
-    // [JsonIgnore]
-    public string? Plaintext { get; set; }
+    [JsonIgnore]
+    private string? Plaintext { get; set; }
     public string Encrypted { get; set; }
     public string? Site { get; set; }
 

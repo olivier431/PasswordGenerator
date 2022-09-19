@@ -10,11 +10,13 @@ namespace PasswordGenerator
 {
     class Program
     {
-
+        
         private static readonly Regex regex = new Regex(@"^\d+$");
 
         static async Task Main(string[] args)
         {
+            string path = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? "";
+            path = Path.Combine(path, "passwords.json");
             string site = "";
             string userName = "";
             string masterPassword = "";
@@ -68,7 +70,11 @@ namespace PasswordGenerator
             {
                 symbol = false;
             }
-            
+
+            if (!(lower || hupper || symbol || number))
+            {
+                throw new ArgumentException("At least 1 of the character types most be present !");
+            }
             
             int length = 0;
             string TempoBuffer = "";
@@ -98,24 +104,24 @@ namespace PasswordGenerator
             string password = Generator(length, lower, hupper, number, symbol);
 
             Console.WriteLine(password);
-            
-            List<Password> passwords = new List<Password>()
-            {
-                new(password, masterPassword, userName, site)
-               
-            };
+
+            List<Password> passwords = new List<Password>();
 
             JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
+            passwords.Add(passwordMethod.AddPassword(password, masterPassword, userName, site));
             string json = JsonSerializer.Serialize(passwords, options);
-            Console.WriteLine(json);
+            File.WriteAllText(path, json);
+          
 
-            passwords = JsonConvert.DeserializeObject<List<Password>>(json) ?? new List<Password>();
-            Console.WriteLine(string.Join("\n", passwords));
+            /*passwords = JsonConvert.DeserializeObject<List<Password>>(json) ?? new List<Password>();
+            Console.WriteLine(string.Join("\n", passwords));*/
 
         }
         
         
     }
+
+   
 }
 
 
