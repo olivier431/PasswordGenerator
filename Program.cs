@@ -106,11 +106,12 @@ namespace PasswordGenerator
             Console.WriteLine(password);
 
             List<Password> passwords = new List<Password>();
-
+            passwords = passwordAndFileMethod.OpenFile();
+            passwords.Add(passwordAndFileMethod.AddPassword(password, masterPassword, userName, site));
             JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
-            passwords.Add(passwordMethod.AddPassword(password, masterPassword, userName, site));
             string json = JsonSerializer.Serialize(passwords, options);
-            File.WriteAllText(path, json);
+            passwordAndFileMethod.Save(json);
+            
           
 
             /*passwords = JsonConvert.DeserializeObject<List<Password>>(json) ?? new List<Password>();
