@@ -5,7 +5,7 @@ using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace PasswordGenerator;
 
-public static class passwordAndFileMethod
+public class passwordAndFileMethod : List<Password>
 {
    
 
@@ -32,7 +32,11 @@ public static class passwordAndFileMethod
     {
         return new Password(plaintext, key, userName, site);
     }
-    
+
+    /*public static Password Find()
+    {
+       
+    }*/
     
 }
 
