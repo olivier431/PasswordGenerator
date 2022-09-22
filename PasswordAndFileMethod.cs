@@ -7,11 +7,11 @@ namespace PasswordGenerator;
 
 public class passwordAndFileMethod : List<Password>
 {
-   
+
 
     public static List<Password> OpenFile()
     {
-        
+
         string path = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? "";
         path = Path.Combine(path, "passwords.json");
         string json = File.ReadAllText(path);
@@ -24,7 +24,7 @@ public class passwordAndFileMethod : List<Password>
     {
         string path = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? "";
         path = Path.Combine(path, "passwords.json");
-        
+
         File.WriteAllText(path, json);
     }
 
@@ -33,10 +33,4 @@ public class passwordAndFileMethod : List<Password>
         return new Password(plaintext, key, userName, site);
     }
 
-    /*public static Password Find()
-    {
-       
-    }*/
-    
 }
-

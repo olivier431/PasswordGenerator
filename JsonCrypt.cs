@@ -5,8 +5,7 @@ namespace PasswordGenerator;
 public class Password
 {
     public string UserName { get; set; }
-    [JsonIgnore]
-    private string? Plaintext { get; set; }
+    [JsonIgnore] public string? Plaintext;
     public string Encrypted { get; set; }
     public string? Site { get; set; }
 
@@ -34,6 +33,8 @@ public class Password
         //TODO: decrypt the Encrypted password and put it in Plaintext
         Plaintext = new AesCrypter(key).Decrypt(Encrypted);
     }
+
+
 
     public override string ToString()
     {
