@@ -37,10 +37,12 @@ namespace PasswordGenerator
                             Console.WriteLine("type the username associated with your password");
                             string username = Console.ReadLine();
                             passwords = passwordAndFileMethod.OpenFile();
+                            bool find = false;
                             foreach (Password password in passwords.ToList())
                             {
                                 if (password.UserName.Equals(username))
                                 {
+                                    find = true;
                                     Console.WriteLine("Username: " + password.UserName + " Password: " + password.Encrypted);
                                     Console.WriteLine("do you want 1: decrypt, 2 : update, 3 : hide the password decrypte 4 : delete, 5 :  quit ");
                                     string check1 = Console.ReadLine();
@@ -73,13 +75,11 @@ namespace PasswordGenerator
                                         
                                     } while (check1 != "5");
                                 }
-                                /*else 
-                                {
-                                    Console.WriteLine("this username does not exist !");
-                                    break;
-                                }*/
-                                
-                                
+                            }
+                            if(find == false)
+                            {
+                                Console.WriteLine("this username does not exist !");
+                                break;
                             }
                         }
                         else if (check == "2")
