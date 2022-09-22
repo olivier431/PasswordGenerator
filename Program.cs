@@ -183,6 +183,12 @@ namespace PasswordGenerator
                                         
                                     } while (check1 != "5");
                                 }
+                                else if (!(password.UserName.Equals(username)))
+                                {
+                                    Console.WriteLine("this username does not exist !");
+                                    break;
+                                }
+                                
                                 
                             }
                         }
@@ -191,7 +197,7 @@ namespace PasswordGenerator
                             passwords = passwordAndFileMethod.OpenFile();
                             foreach (Password password in passwords)
                             {
-                                Console.WriteLine("Username: " + password.UserName + " Password: " + password.Encrypted);
+                                passwordAndFileMethod.ListPassword(password);
                             }
 
                             check = "3";

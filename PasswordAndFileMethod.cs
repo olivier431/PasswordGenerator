@@ -5,7 +5,7 @@ using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace PasswordGenerator;
 
-public class passwordAndFileMethod : List<Password>
+public class passwordAndFileMethod
 {
 
 
@@ -72,7 +72,7 @@ public class passwordAndFileMethod : List<Password>
     public static void Hide(Password password)
     {
         Console.Clear();
-        Console.WriteLine("Username: " + password.UserName + " Password: The password is hidden");
+        Console.WriteLine("Username: " + password.UserName + " Site: " + password.Site + " Password: The password is hidden");
     }
     
     public static void Delete(List<Password> passwords, Password password)
@@ -80,5 +80,9 @@ public class passwordAndFileMethod : List<Password>
         passwords.Remove(password);
         Console.WriteLine("Your Password is now delete");
     }
-
+    
+    public static void ListPassword(Password password)
+    {
+        Console.WriteLine("Username: " + password.UserName + " Site: " + password.Site + " Password: " + password.Encrypted);
+    }
 }
