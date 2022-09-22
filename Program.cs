@@ -10,15 +10,11 @@ namespace PasswordGenerator
 {
     class Program
     {
-        
-        private static readonly Regex regex = new Regex(@"^\d+$");
-
         private static string answer;
         private static List<Password> passwords = new List<Password>();
         static async Task Main(string[] args)
         {
-            string path = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? "";
-            path = Path.Combine(path, "passwords.json");
+            
 
             do
             {
@@ -26,110 +22,7 @@ namespace PasswordGenerator
                 answer = Console.ReadLine();
                 if (answer == "1")
                 { 
-                    string site = "";
-                    string userName = "";
-                    string masterPassword = "";
-                    bool hupper, lower, number, symbol;
-                    Console.WriteLine("What is your Username ?");
-                    userName = Console.ReadLine();
-                    
-                    Console.WriteLine("For wich site do you want to register a password ?");
-                    site = Console.ReadLine();
-                    
-                    Console.WriteLine("Do you want lowerLetter ?");
-                    string choice = Console.ReadLine();
-                    if (choice == "Y" || choice == "y")
-                    {
-                        lower = true;
-                    }
-                    else
-                    {
-                        lower = false;
-                    }
-                    
-                    Console.WriteLine("Do you want hupperLetter ?");
-                    choice = Console.ReadLine();
-                    if (choice == "Y" || choice == "y")
-                    {
-                        hupper = true;
-                    }
-                    else
-                    {
-                        hupper = false;
-                    }
-                    
-                    Console.WriteLine("Do you want number ?");
-                    choice = Console.ReadLine();
-                    if (choice == "Y" || choice == "y")
-                    {
-                        number = true;
-                    }
-                    else
-                    {
-                        number = false;
-                    }
-                    
-                    Console.WriteLine("Do you want symbol ?");
-                    choice = Console.ReadLine();
-                    if (choice == "Y" || choice == "y")
-                    {
-                        symbol = true;
-                    }
-                    else
-                    {
-                        symbol = false;
-                    }
-
-                    if (!(lower || hupper || symbol || number))
-                    {
-                        throw new ArgumentException("At least 1 of the character types most be present !");
-                    }
-                    
-                    int length = 0;
-                    string TempoBuffer = "";
-                    Console.WriteLine("Do you want the default length(16)? (Y/N)");
-                    choice = Console.ReadLine();
-                    if (choice == "Y" || choice == "y")
-                    {
-                        length = 16;
-                    }
-                    else
-                    {
-                        do
-                        {
-                            Console.WriteLine("How many caracters do you want ? Must be between 8 to 64 ");
-                            TempoBuffer = Console.ReadLine();
-                            if (regex.IsMatch(TempoBuffer))
-                            {
-                                length = Convert.ToInt32(TempoBuffer);
-                            }
-
-                        } while (!regex.IsMatch(TempoBuffer) || (length < 8 || length > 64));
-                    }
-                    
-                    Console.WriteLine("What is your masterPassword ?");
-                    masterPassword = Console.ReadLine();
-
-                    string password = Generator(length, lower, hupper, number, symbol);
-
-                    Console.WriteLine(password);
-                    
-
-                    if (File.Exists(path))
-                    {
-                        Console.WriteLine(passwords.Count);
-                        passwords = passwordAndFileMethod.OpenFile();
-                        passwords.Add(passwordAndFileMethod.AddPassword(password, masterPassword, userName, site));
-                        JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
-                        string json = JsonSerializer.Serialize(passwords, options);
-                        passwordAndFileMethod.Save(json);
-                    }
-                    else
-                    {
-                        JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
-                        string json = JsonSerializer.Serialize(passwords, options);
-                        passwordAndFileMethod.Save(json);
-                    }
+                    passwordAndFileMethod.FirstGeneratePassword(passwords);
                 }
                 else if (answer == "2")
                 {
@@ -161,7 +54,7 @@ namespace PasswordGenerator
                                         else if (check1 == "2")
                                         {
 
-                                            passwordAndFileMethod.EditList(password);
+                                            passwordAndFileMethod.EditList(password, passwords);
                                             check1 = "5";
                                         }
 
@@ -176,18 +69,15 @@ namespace PasswordGenerator
                                             passwordAndFileMethod.Delete(passwords, password);
                                             check1 = "5";
                                         }
-                                    
-                                        JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
-                                        string json = JsonSerializer.Serialize(passwords, options);
-                                        passwordAndFileMethod.Save(json);
+                                        passwordAndFileMethod.Save(passwords);
                                         
                                     } while (check1 != "5");
                                 }
-                                else if (!(password.UserName.Equals(username)))
+                                /*else 
                                 {
                                     Console.WriteLine("this username does not exist !");
                                     break;
-                                }
+                                }*/
                                 
                                 
                             }
