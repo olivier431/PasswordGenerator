@@ -155,52 +155,25 @@ namespace PasswordGenerator
                                     {
                                         if (check1 == "1")
                                         {
-                                            Console.WriteLine("What is your MasterKey ?");
-                                            string key = Console.ReadLine();
-                                            password.Decrypt(key);
-                                            Console.WriteLine(" Password: " + password.Plaintext);
-                                            password.Encrypt(key);
+                                            passwordAndFileMethod.ShowDecryptPassword(password);
                                             check1 = "5";
                                         }
                                         else if (check1 == "2")
                                         {
-                                            
-                                            Console.WriteLine("do you want update 1 : username, 2 : password, 3 : site");
-                                            string check2 = Console.ReadLine();
-                                            if (check2 == "1")
-                                            {
-                                                Console.WriteLine("enter your new username");
-                                                password.UserName = Console.ReadLine();
 
-                                            }
-                                            else if(check2 == "2")
-                                            {
-                                                Console.WriteLine("What is your MasterKey ?");
-                                                string key = Console.ReadLine();
-                                                password.Decrypt(key);
-                                                Console.WriteLine("Enter your new password ");
-                                                password.Plaintext = Console.ReadLine();
-                                                password.Encrypt(key);
-                                            }
-                                            else if (check2 == "3")
-                                            {
-                                                Console.WriteLine("enter your new site");
-                                                password.Site = Console.ReadLine();
-                                            }
-
+                                            passwordAndFileMethod.EditList(password);
                                             check1 = "5";
                                         }
 
                                         else if (check1 == "3")
                                         {
-                                            Console.Clear();
-                                            Console.WriteLine("Username: " + password.UserName + " Password: The password is hidden");
+                                            passwordAndFileMethod.Hide(password);
                                             check1 = "5";
                                         }
                                         
                                         else if (check1 == "4")
                                         {
-                                            passwords.Remove(password);
+                                            passwordAndFileMethod.Delete(passwords, password);
                                             check1 = "5";
                                         }
                                     
