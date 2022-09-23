@@ -7,7 +7,7 @@ public class AesCrypter
 {
     private Aes _aes = Aes.Create();
 
-    //TODO: make the key property private?
+
     private string Key
     {
         get => string.Join("", _aes.Key.Select(b => $"{b:X}"));
@@ -114,8 +114,7 @@ public class AesCrypter
                 numBytesRead += n;
                 numBytesToRead -= n;
             }
-
-
+            
             using (CryptoStream cryptoStream = new(
                        memoryStream,
                        _aes.CreateDecryptor(_aes.Key, iv),

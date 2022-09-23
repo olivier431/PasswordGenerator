@@ -1,11 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace PasswordGenerator;
 
 public class Password
 {
     public string UserName { get; set; }
-    [JsonIgnore] public string? Plaintext;
+    
+    [System.Text.Json.Serialization.JsonIgnore] public string? Plaintext;
     public string Encrypted { get; set; }
     public string? Site { get; set; }
 
@@ -20,7 +22,7 @@ public class Password
 
     public void Encrypt(String key)
     {
-        //TODO: encrypt the Plaintext password and put it in Encrypted
+
         if (Plaintext != null)
         {
             Encrypted = new AesCrypter(key).Encrypt(Plaintext);
@@ -30,12 +32,9 @@ public class Password
     
     public void Decrypt(string key)
     {
-        //TODO: decrypt the Encrypted password and put it in Plaintext
         Plaintext = new AesCrypter(key).Decrypt(Encrypted);
     }
-
-
-
+    
     public override string ToString()
     {
         return $"{Site} --> {UserName} --> {Plaintext ?? "<null>"} --> {Encrypted}";

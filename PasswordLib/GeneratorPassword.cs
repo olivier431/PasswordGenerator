@@ -7,8 +7,6 @@ public class GeneratorGenerator
 {
     public static string Generator(int length, bool Lower, bool Hupper, bool Number, bool Symbol)
             {
-               
-                
                 string pattern = "";
     
                 if (Lower)

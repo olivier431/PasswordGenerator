@@ -42,9 +42,17 @@ public class passwordAndFileMethod
     {
         Console.WriteLine("What is your MasterKey ?");
         string key = Console.ReadLine();
-        password.Decrypt(key);
-        Console.WriteLine(" Password: " + password.Plaintext);
-        password.Encrypt(key);
+        try
+        {
+            password.Decrypt(key);
+            Console.WriteLine(" Password: " + password.Plaintext);
+            password.Encrypt(key);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("This MasterKey does not exist");
+        }
+        
     }
     
     public static void EditList(Password password, List<Password> passwords)
@@ -53,23 +61,37 @@ public class passwordAndFileMethod
         string check2 = Console.ReadLine();
         if (check2 == "1")
         {
+            Console.WriteLine("the username you want to update : " + password.UserName);
             Console.WriteLine("enter your new username");
             password.UserName = Console.ReadLine();
+            Console.WriteLine("your new username : " + password.UserName );
 
         }
         else if(check2 == "2")
         {
             Console.WriteLine("What is your MasterKey ?");
             string key = Console.ReadLine();
-            password.Decrypt(key);
-            Console.WriteLine("a new password will be generate");
-            password.Plaintext = RegeneratePassword(passwords);
-            password.Encrypt(key);
+            try
+            {
+                password.Decrypt(key);
+                Console.WriteLine("the password you want to update : " + password.Plaintext);
+                Console.WriteLine("a new password will be generate");
+                password.Plaintext = RegeneratePassword(passwords);
+                Console.WriteLine("Your password has been changed to : " + password.Plaintext);
+                password.Encrypt(key);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("This MasterKey does not exist");
+            }
+            
         }
         else if (check2 == "3")
         {
+            Console.WriteLine("the site you want to update : " + password.Site);
             Console.WriteLine("enter your new site");
             password.Site = Console.ReadLine();
+            Console.WriteLine("your new site : " + password.Site );
         }
 
     }
@@ -271,8 +293,6 @@ public class passwordAndFileMethod
 
             } while (!regex.IsMatch(TempoBuffer) || (length < 8 || length > 64));
         }
-                    
-       
         string password = GeneratorGenerator.Generator(length, lower, hupper, number, symbol);
         
         passwordAndFileMethod.Save(passwords);

@@ -14,8 +14,6 @@ namespace PasswordGenerator
         private static List<Password> passwords = new List<Password>();
         static async Task Main(string[] args)
         {
-            
-
             do
             {
                 Console.WriteLine("Choose an option 1: create password 2: check passwords 3:CLose");
@@ -29,7 +27,7 @@ namespace PasswordGenerator
                     string check;
                     do
                     {
-                        Console.WriteLine("1 : Password associate with your username, 2 : see the list, 3 : quit");
+                        Console.WriteLine("1 : List Password associate with your username, 2 : see the list, 3 : quit");
                         check = Console.ReadLine();
                         if (check == "1")
                         {
@@ -38,20 +36,23 @@ namespace PasswordGenerator
                             string username = Console.ReadLine();
                             passwords = passwordAndFileMethod.OpenFile();
                             bool find = false;
+                            int count = 0;
                             foreach (Password password in passwords.ToList())
                             {
                                 if (password.UserName.Equals(username))
                                 {
+                                    count++;
                                     find = true;
-                                    Console.WriteLine("Username: " + password.UserName + " Password: " + password.Encrypted);
-                                    Console.WriteLine("do you want 1: decrypt, 2 : update, 3 : hide the password decrypte 4 : delete, 5 :  quit ");
-                                    string check1 = Console.ReadLine();
+                                    Console.WriteLine("Password # " + count +" Username: " + password.UserName + " Site: " + password.Site +  " Password: " + password.Encrypted);
+                                    string check1;
                                     do
                                     {
+                                        Console.WriteLine("do you want 1: decrypt, 2 : update, 3 : hide the password decrypte 4 : delete, 5 :  quit ");
+                                        check1 = Console.ReadLine();
                                         if (check1 == "1")
                                         {
                                             passwordAndFileMethod.ShowDecryptPassword(password);
-                                            check1 = "5";
+                                            
                                         }
                                         else if (check1 == "2")
                                         {
@@ -85,9 +86,16 @@ namespace PasswordGenerator
                         else if (check == "2")
                         {
                             passwords = passwordAndFileMethod.OpenFile();
+                            int count1 = 0;
                             foreach (Password password in passwords)
                             {
+                                count1++;
                                 passwordAndFileMethod.ListPassword(password);
+                            }
+
+                            if (count1 == 0)
+                            {
+                                Console.WriteLine("The list is empty ! Create Password to show the list !");
                             }
 
                             check = "3";
@@ -96,11 +104,8 @@ namespace PasswordGenerator
                 }
             } while (answer != "3");
         }
-        
-        
-    }
 
-   
+    }
 }
 
 
