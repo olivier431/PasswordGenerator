@@ -14,7 +14,46 @@ namespace PasswordGenerator
         private static List<Password> passwords = new List<Password>();
         static async Task Main(string[] args)
         {
-            do
+            string CheckInscription = "";
+            DB_Methode DB = new DB_Methode();
+            UserDB currentUser = new UserDB(-1);
+            
+            if (currentUser.id == -1)
+            {
+                do
+                {
+                    Console.WriteLine("Choose an option 1: Inscription 2: Connection");
+                    CheckInscription = Console.ReadLine();
+                    if (CheckInscription == "1")
+                    {
+                        Console.WriteLine("What is your name?");
+                        string fullname = Console.ReadLine();
+                        Console.WriteLine("What is your username?");
+                        string username = Console.ReadLine();
+                        Console.WriteLine("What is your password?");
+                        string password = Console.ReadLine();
+                        Console.WriteLine("What is your email?");
+                        string email = Console.ReadLine();
+                            
+                        DB.adduser(username, fullname, email, password);
+                    }
+
+                    if (CheckInscription == "2")
+                    {
+                        Console.WriteLine("What is your username?");
+                        string username = Console.ReadLine();
+                        Console.WriteLine("What is your password?");
+                        string password = Console.ReadLine();
+
+                        currentUser = DB.ConnecteUser(username, password);
+                        Console.WriteLine(currentUser.id);
+                    }
+                } while (currentUser.id == -1);
+            }
+
+            if (currentUser.id != -1)
+            {
+                 do
             {
                 Console.WriteLine("Choose an option 1: create password 2: check passwords 3:CLose");
                 answer = Console.ReadLine();
@@ -103,6 +142,8 @@ namespace PasswordGenerator
                     } while (check != "3");
                 }
             } while (answer != "3");
+            }
+           
         }
 
     }
