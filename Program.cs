@@ -46,13 +46,14 @@ namespace PasswordGenerator
                         string password = Console.ReadLine();
 
                         currentUser = DB.ConnecteUser(username, password);
-                        Console.WriteLine("Welcome " + currentUser.login + " you are now connect ! ");
+                        
                     }
                 } while (currentUser.id == -1);
             }
 
             if (currentUser.id != -1)
             {
+                Console.WriteLine("Welcome " + currentUser.login + " you are now connect ! ");
                  do
                  {
                      Console.WriteLine("Choose an option 1: create password 2: check passwords 3:CLose");
