@@ -15,8 +15,7 @@ namespace PasswordGenerator
         static async Task Main(string[] args)
         {
             string CheckInscription = "";
-            DB_Methode DB = new DB_Methode();
-            UserDB currentUser = new UserDB(-1);
+            UserDB currentUser = PasswordUserDB_Method.GetUser();
             
             if (currentUser.id == -1)
             {
@@ -26,26 +25,16 @@ namespace PasswordGenerator
                     CheckInscription = Console.ReadLine();
                     if (CheckInscription == "1")
                     {
-                        Console.WriteLine("What is your name?");
-                        string fullname = Console.ReadLine();
-                        Console.WriteLine("What is your username?");
-                        string username = Console.ReadLine();
-                        Console.WriteLine("What is your password?");
-                        string password = Console.ReadLine();
-                        Console.WriteLine("What is your email?");
-                        string email = Console.ReadLine();
-                            
-                        DB.adduser(username, fullname, email, password);
+                        PasswordUserDB_Method.Inscription();
                     }
 
                     if (CheckInscription == "2")
                     {
-                        Console.WriteLine("What is your username?");
-                        string username = Console.ReadLine();
-                        Console.WriteLine("What is your password?");
-                        string password = Console.ReadLine();
-
-                        currentUser = DB.ConnecteUser(username, password);
+                        currentUser = PasswordUserDB_Method.Connection();
+                        if (currentUser.id == -1)
+                        {
+                            Console.WriteLine("invalid password or username ! ");
+                        }
                         
                     }
                 } while (currentUser.id == -1);
@@ -60,84 +49,30 @@ namespace PasswordGenerator
                      answer = Console.ReadLine();
                      if (answer == "1")
                      { 
+                         
                          passwordAndFileMethod.FirstGeneratePassword(passwords);
+                         
                      }
                      else if (answer == "2")
                      {
                          string check;
                          do
                          {
-                             Console.WriteLine("1 : List Password associate with your username, 2 : see the list, 3 : quit");
+                             Console.WriteLine("1 : List Password associate with site, 2 : see all your passwords, 3 : quit");
                              check = Console.ReadLine();
                              if (check == "1")
                              {
-                            
-                                 Console.WriteLine("type the username associated with your password");
-                                 string username = Console.ReadLine();
-                                 passwords = passwordAndFileMethod.OpenFile();
-                                 bool find = false;
-                                 int count = 0;
-                                 foreach (Password password in passwords.ToList())
-                                 {
-                                     if (password.UserName.Equals(username))
-                                     {
-                                         count++;
-                                         find = true;
-                                         Console.WriteLine("Password # " + count +" Username: " + password.UserName + " Site: " + password.Site +  " Password: " + password.Encrypted);
-                                         string check1;
-                                         do
-                                         {
-                                             Console.WriteLine("do you want 1: decrypt, 2 : update, 3 : hide the password decrypte 4 : delete, 5 :  quit ");
-                                             check1 = Console.ReadLine();
-                                             if (check1 == "1")
-                                             {
-                                                 passwordAndFileMethod.ShowDecryptPassword(password);
-                                            
-                                             }
-                                             else if (check1 == "2")
-                                             {
-
-                                                 passwordAndFileMethod.EditList(password, passwords);
-                                                 check1 = "5";
-                                             }
-
-                                             else if (check1 == "3")
-                                             {
-                                                 passwordAndFileMethod.Hide(password);
-                                                 check1 = "5";
-                                             }
-                                        
-                                             else if (check1 == "4")
-                                             {
-                                                 passwordAndFileMethod.Delete(passwords, password);
-                                                 check1 = "5";
-                                             }
-                                             passwordAndFileMethod.Save(passwords);
-                                        
-                                         } while (check1 != "5");
-                                     }
-                                 }
-                                 if(find == false)
-                                 {
-                                     Console.WriteLine("this username does not exist !");
-                                     break;
-                                 }
+                                
+                                 //passwordAndFileMethod.ListPasswordBySite(passwords);
+                                 PasswordUserDB_Method.ListDBPasswordBySite();
+                                 
                              }
                              else if (check == "2")
                              {
-                                 passwords = passwordAndFileMethod.OpenFile();
-                                 int count1 = 0;
-                                 foreach (Password password in passwords)
-                                 {
-                                     count1++;
-                                     passwordAndFileMethod.ListPassword(password);
-                                 }
-
-                                 if (count1 == 0)
-                                 {
-                                     Console.WriteLine("The list is empty ! Create Password to show the list !");
-                                 }
-
+                                 // passwords = passwordAndFileMethod.OpenFile();
+                                 //
+                                 // passwordAndFileMethod.ListPassword(passwords);
+                                 PasswordUserDB_Method.ListDBPassword();
                                  check = "3";
                              }
                          } while (check != "3");

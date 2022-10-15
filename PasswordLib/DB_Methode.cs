@@ -17,7 +17,7 @@ public class DB_Methode
   
     }
 
-    public bool AddPassword(int user_id, String site, String login , String password )
+    public bool AddPassword(int user_id, String site, String login , String password)
     { 
         sql = "INSERT into passwords (user_id, site, login, password) VALUES ('" + user_id + "','" + site + "','" + login + "','"+ password + "')";
         var command = new MySqlCommand(sql, conn);
@@ -143,10 +143,27 @@ public class DB_Methode
         }
         return user_Password;
     }
+    
+    public List<PasswordDB> GetUserPasswordsBySite(int id, string site)
+    {
+        List<PasswordDB> user_Password = new List<PasswordDB>();
+
+        sql = "SELECT * FROM passwords WHERE user_id ='" + id + "' and site = '" + site + "'";
+        using (var cmd = new MySqlCommand(sql, conn))
+        {
+            var reader = cmd.ExecuteReader();
+            while(reader.Read())
+            {
+                user_Password.Add(new PasswordDB(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4)));
+            }
+            reader.Close();        
+        }
+        return user_Password;
+    }
 
     public bool ConnectedUpdate(int id)
     {
-        sql = "UPDATE users SET last_connection = CURRENT_DATE()";
+        sql = "UPDATE users SET last_connection = NOW() WHERE id ='" + id + "'";
         var cmd = new MySqlCommand(sql, conn);
         try
         {

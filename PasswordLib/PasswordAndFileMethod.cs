@@ -8,7 +8,8 @@ namespace PasswordGenerator;
 
 public class passwordAndFileMethod
 {
-
+    private static DB_Methode DB = PasswordUserDB_Method.GetDB();
+    private static UserDB CurrentUser = PasswordUserDB_Method.GetUser();
     private static readonly Regex regex = new Regex(@"^\d+$");
     public static List<Password> OpenFile()
     {
@@ -108,9 +109,73 @@ public class passwordAndFileMethod
         Console.WriteLine("Your Password is now delete");
     }
     
-    public static void ListPassword(Password password)
+    public static void ListPassword(List<Password> passwords)
     {
-        Console.WriteLine("Username: " + password.UserName + " Site: " + password.Site + " Password: " + password.Encrypted);
+        int count = 0;
+        foreach (Password password in passwords)
+        {
+            count++;
+            
+            Console.WriteLine("Password # " + count + " Username: " + password.UserName + " Site: " + password.Site + " Password: " + password.Encrypted);
+        }
+
+        if (count == 0)
+        {
+            Console.WriteLine("The list is empty ! Create Password to show the list !");
+        }
+    }
+
+    public static void ListPasswordBySite(List<Password> passwords)
+    {
+        Console.WriteLine("type the site associated with your password");
+        string site = Console.ReadLine();
+        passwords = passwordAndFileMethod.OpenFile();
+        bool find = false;
+        int count = 0;
+        foreach (Password password in passwords.ToList())
+        {
+            if (password.Site.Equals(site))
+            {
+                count++;
+                find = true;
+                Console.WriteLine("Password # " + count +" Username: " + password.UserName + " Site: " + password.Site +  " Password: " + password.Encrypted);
+                string check1;
+                do
+                {
+                    Console.WriteLine("do you want 1: decrypt, 2 : update, 3 : hide the password decrypte 4 : delete, 5 :  quit ");
+                    check1 = Console.ReadLine();
+                    if (check1 == "1")
+                    {
+                        passwordAndFileMethod.ShowDecryptPassword(password);
+                                            
+                    }
+                    else if (check1 == "2")
+                    {
+
+                        passwordAndFileMethod.EditList(password, passwords);
+                        check1 = "5";
+                    }
+
+                    else if (check1 == "3")
+                    {
+                        passwordAndFileMethod.Hide(password);
+                        check1 = "5";
+                    }
+                                        
+                    else if (check1 == "4")
+                    {
+                        passwordAndFileMethod.Delete(passwords, password);
+                        check1 = "5";
+                    }
+                    passwordAndFileMethod.Save(passwords);
+                                        
+                } while (check1 != "5");
+            }
+        }
+        if(find == false)
+        {
+            Console.WriteLine("this username does not exist !");
+        }
     }
 
     public static string FirstGeneratePassword(List<Password> passwords)
@@ -202,7 +267,9 @@ public class passwordAndFileMethod
         masterPassword = Console.ReadLine();
 
         string password = GeneratorGenerator.Generator(length, lower, hupper, number, symbol);
-                    
+
+        DB.AddPassword(CurrentUser.id, site, userName, password);
+        
         if (File.Exists(path))
         {
             passwords = passwordAndFileMethod.OpenFile();
