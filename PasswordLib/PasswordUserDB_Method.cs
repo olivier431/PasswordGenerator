@@ -39,6 +39,11 @@ public class PasswordUserDB_Method
         return DB;
     }
 
+    public static void AddPassword(int CurrentUserId, string site, string username, string password)
+    {
+        DB.AddPassword(CurrentUserId, site, username, password);
+    }
+
     public static void ListDBPassword()
     {
         int count = 0;

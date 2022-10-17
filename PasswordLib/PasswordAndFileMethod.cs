@@ -268,7 +268,7 @@ public class passwordAndFileMethod
 
         string password = GeneratorGenerator.Generator(length, lower, hupper, number, symbol);
 
-        DB.AddPassword(CurrentUser.id, site, userName, password);
+        PasswordUserDB_Method.AddPassword(CurrentUser.id, site, userName, password);
         
         if (File.Exists(path))
         {

@@ -80,7 +80,7 @@ public class DB_Methode
     
     public bool adduser(String username, String fullname , String email, String password)
     {
-        sql = "INSERT into users (username, fullname, password, email) VALUES ('" + username + "','" + fullname + "','" + password + "','" + email + "')";
+        sql = "INSERT into users (username, fullname, password, email) VALUES ('" + username + "','" + fullname + "','" + "'SHA2'" + "(" + password + "','" + "'256'" + "')'" +  "','" + email + "')";
         var cmd = new MySqlCommand(sql, conn);
         try
         {
@@ -106,7 +106,7 @@ public class DB_Methode
     public UserDB ConnecteUser(String login, String password)
     {
         UserDB user = new UserDB(-1);
-        sql = "SELECT * FROM users WHERE username ='" + login + "' and password = '" + password + "'";
+        sql = "SELECT * FROM users WHERE username ='" + login + "' and password = SHA2('" + password + "',256)";
         using (var cmd = new MySqlCommand(sql, conn))
         {
 
