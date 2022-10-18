@@ -57,7 +57,7 @@ public class DB_Methode
     
     public bool UpdatePassword(int id, int user_id, String site, String login, String password)
     {
-        sql = "UPDATE passwords SET user_id ='" + user_id + "' ,site = '" + site + "',login = '" + login + "',password = '" + password + "',modified_at = CURRENT_DATE WHERE id = '" + id + "'";
+        sql = "UPDATE passwords SET user_id ='" + user_id + "' ,site = '" + site + "',login = '" + login + "',password = '" + password + "',modified_at = NOW() WHERE id = '" + id + "'";
         var command = new MySqlCommand(sql, conn);
         try
         {
@@ -137,7 +137,7 @@ public class DB_Methode
             var reader = cmd.ExecuteReader();
             while(reader.Read())
             {
-                user_Password.Add(new PasswordDB(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4)));
+                user_Password.Add(new PasswordDB(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetDateTime(5), reader.GetDateTime(6)));
             }
             reader.Close();        
         }
@@ -154,7 +154,7 @@ public class DB_Methode
             var reader = cmd.ExecuteReader();
             while(reader.Read())
             {
-                user_Password.Add(new PasswordDB(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4)));
+                user_Password.Add(new PasswordDB(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetDateTime(5), reader.GetDateTime(6)));
             }
             reader.Close();        
         }
