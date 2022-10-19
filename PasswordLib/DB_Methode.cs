@@ -11,7 +11,7 @@ public class DB_Methode
 
     public DB_Methode()
     { 
-        connStr = "server=192.168.74.131;user=olivier;database=PasswordGenerator;password=Frederique43!;"; 
+        connStr = "server=192.168.19.132;user=olivier;database=PasswordGenerator;password=Frederique43!;"; 
         conn = new MySqlConnection(connStr);
         conn.Open();
   
@@ -80,6 +80,7 @@ public class DB_Methode
     
     public bool adduser(String username, String fullname , String email, String password)
     {
+        
         sql = "INSERT into users (username, fullname, password, email) VALUES ('" + username + "','" + fullname + "', SHA2('"  + password +  "' ,256),'" + email + "')";
         var cmd = new MySqlCommand(sql, conn);
         try
@@ -119,6 +120,7 @@ public class DB_Methode
                 user.password = reader.GetString((3));
                 user.email = reader.GetString(4);
                 
+
             }
             reader.Close();        
         }
@@ -137,7 +139,7 @@ public class DB_Methode
             var reader = cmd.ExecuteReader();
             while(reader.Read())
             {
-                user_Password.Add(new PasswordDB(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetDateTime(5), reader.GetDateTime(6)));
+                user_Password.Add(new PasswordDB(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4)));
             }
             reader.Close();        
         }
@@ -154,7 +156,7 @@ public class DB_Methode
             var reader = cmd.ExecuteReader();
             while(reader.Read())
             {
-                user_Password.Add(new PasswordDB(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetDateTime(5), reader.GetDateTime(6)));
+                user_Password.Add(new PasswordDB(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4)));
             }
             reader.Close();        
         }

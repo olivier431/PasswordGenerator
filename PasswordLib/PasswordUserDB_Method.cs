@@ -1,4 +1,6 @@
-﻿namespace PasswordGenerator;
+﻿using static PasswordGenerator.PasswordDB;
+
+namespace PasswordGenerator;
 
 public class PasswordUserDB_Method
 {
@@ -39,9 +41,10 @@ public class PasswordUserDB_Method
         return DB;
     }
 
-    public static void AddPassword(int CurrentUserId, string site, string username, string password)
+    public static void AddPassword(string key, int CurrentUserId, string site, string username, string password)
     {
         DB.AddPassword(CurrentUserId, site, username, password);
+        PasswordDB.Encrypt(key);
     }
 
     public static void ListDBPassword()
@@ -51,7 +54,38 @@ public class PasswordUserDB_Method
         foreach (var password in passwordsDB)
         {
             count++;
-            Console.WriteLine("Password # " + count + " Username: " + password.login + " Site: " + password.site + " Password: " + password.Password);
+            Console.WriteLine("Password # " + count + " Username: " + password.login + " Site: " + password.site + " Password: " + password.PasswordNoStatic);
+            string check1;
+            do
+            {
+                Console.WriteLine("do you want 1: decrypt, 2 : update, 3 : hide the password decrypte 4 : delete, 5 :  quit ");
+                check1 = Console.ReadLine();
+                if (check1 == "1")
+                {
+                    //passwordAndFileMethod.ShowDecryptPassword(password);
+                                            
+                }
+                else if (check1 == "2")
+                {
+
+                    //passwordAndFileMethod.EditList(password, passwords);
+                    check1 = "5";
+                }
+
+                else if (check1 == "3")
+                {
+                    //passwordAndFileMethod.Hide(password);
+                    check1 = "5";
+                }
+                                        
+                else if (check1 == "4")
+                {
+                    //passwordAndFileMethod.Delete(passwords, password);
+                    check1 = "5";
+                }
+                //passwordAndFileMethod.Save(passwords);
+                                        
+            } while (check1 != "5");
         }
     }
 
@@ -69,7 +103,7 @@ public class PasswordUserDB_Method
             {
                 count++;
                 find = true;
-                Console.WriteLine("Password # " + count +" Username: " + password.login + " Site: " + password.site +  " Password: " + password.Password);
+                Console.WriteLine("Password # " + count +" Username: " + password.login + " Site: " + password.site +  " Password: " + password.PasswordNoStatic);
                 string check1;
                 do
                 {
@@ -109,4 +143,6 @@ public class PasswordUserDB_Method
             
         }
     }
+    
+   
 }

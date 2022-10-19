@@ -262,13 +262,10 @@ public class passwordAndFileMethod
 
             } while (!regex.IsMatch(TempoBuffer) || (length < 8 || length > 64));
         }
-                    
-        Console.WriteLine("What is your masterPassword ?");
-        masterPassword = Console.ReadLine();
 
         string password = GeneratorGenerator.Generator(length, lower, hupper, number, symbol);
 
-        PasswordUserDB_Method.AddPassword(CurrentUser.id, site, userName, password);
+        PasswordUserDB_Method.AddPassword(CurrentUser.password, CurrentUser.id, site, userName, password);
         
         if (File.Exists(path))
         {
