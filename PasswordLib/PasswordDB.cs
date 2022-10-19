@@ -7,11 +7,8 @@ public class PasswordDB
     public int user_id{ get; set; }
     public string site{ get; set; }
     public string login{ get; set; }
-    public static string Password { get; set; }
-    
-    public string PasswordNoStatic { get; set; }
-    public static string Encrypted { get; set; }
-    
+    public string Password { get; set; }
+
     //public DateTime CreatedAt { get; set; }
     
     //public DateTime ModifiedAt { get; set; }
@@ -27,21 +24,7 @@ public class PasswordDB
         Password = password;
         //CreatedAt = createdAt;
         //ModifiedAt = modifiedAt;
-        PasswordNoStatic = password;
     }
     
-    public static void Encrypt(String key)
-    {
-        if (Password != null)
-        {
-            Encrypted = new AesCrypter(key).Encrypt(Password);
-            Password = null;
-        }
-    }
-    
-    public void Decrypt(string key)
-    {
-        Password = new AesCrypter(key).Decrypt(Encrypted);
-    }
 
 }

@@ -43,8 +43,12 @@ public class PasswordUserDB_Method
 
     public static void AddPassword(string key, int CurrentUserId, string site, string username, string password)
     {
+        key = currentUser.password;
+        Console.WriteLine(password);
+        password = EncryptAndDecrypt.Encrypt(key, password);
+        Console.WriteLine(password);
         DB.AddPassword(CurrentUserId, site, username, password);
-        PasswordDB.Encrypt(key);
+
     }
 
     public static void ListDBPassword()
@@ -54,7 +58,7 @@ public class PasswordUserDB_Method
         foreach (var password in passwordsDB)
         {
             count++;
-            Console.WriteLine("Password # " + count + " Username: " + password.login + " Site: " + password.site + " Password: " + password.PasswordNoStatic);
+            Console.WriteLine("Password # " + count + " Username: " + password.login + " Site: " + password.site + " Password: " + password.Password);
             string check1;
             do
             {
@@ -62,6 +66,13 @@ public class PasswordUserDB_Method
                 check1 = Console.ReadLine();
                 if (check1 == "1")
                 {
+                    
+                    Console.WriteLine("Please reenter your account password");
+                    string pwd = Console.ReadLine();
+                    string key = HASH.Sha256(pwd);
+                    //password.Decrypt(key);
+                    Console.WriteLine(" Password: " + password.Password);
+                    //PasswordDB.Encrypt(key);
                     //passwordAndFileMethod.ShowDecryptPassword(password);
                                             
                 }
@@ -103,7 +114,7 @@ public class PasswordUserDB_Method
             {
                 count++;
                 find = true;
-                Console.WriteLine("Password # " + count +" Username: " + password.login + " Site: " + password.site +  " Password: " + password.PasswordNoStatic);
+                Console.WriteLine("Password # " + count +" Username: " + password.login + " Site: " + password.site +  " Password: " + password.Password);
                 string check1;
                 do
                 {
@@ -111,7 +122,7 @@ public class PasswordUserDB_Method
                     check1 = Console.ReadLine();
                     if (check1 == "1")
                     {
-                        //passwordAndFileMethod.ShowDecryptPassword(password);
+                       
                                             
                     }
                     else if (check1 == "2")
@@ -143,6 +154,5 @@ public class PasswordUserDB_Method
             
         }
     }
-    
-   
+
 }
