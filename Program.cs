@@ -11,7 +11,7 @@ namespace PasswordGenerator
     class Program
     {
         private static string answer;
-        private static List<Password> passwords = new List<Password>();
+
         static async Task Main(string[] args)
         {
             string CheckInscription = "";
@@ -49,10 +49,8 @@ namespace PasswordGenerator
                      Console.WriteLine("Choose an option 1: create password 2: check passwords 3:CLose");
                      answer = Console.ReadLine();
                      if (answer == "1")
-                     { 
-                         
-                         passwordAndFileMethod.FirstGeneratePassword(passwords);
-                         
+                     {
+                         passwordAndFileMethod.FirstGeneratePassword();
                      }
                      else if (answer == "2")
                      {
@@ -63,15 +61,12 @@ namespace PasswordGenerator
                              check = Console.ReadLine();
                              if (check == "1")
                              {
-                                
                                  //passwordAndFileMethod.ListPasswordBySite(passwords);
                                  PasswordUserDB_Method.ListDBPasswordBySite();
-                                 
                              }
                              else if (check == "2")
                              {
                                  // passwords = passwordAndFileMethod.OpenFile();
-                                 //
                                  // passwordAndFileMethod.ListPassword(passwords);
                                  PasswordUserDB_Method.ListDBPassword();
                                  check = "3";

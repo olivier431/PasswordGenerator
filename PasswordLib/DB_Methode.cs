@@ -11,7 +11,7 @@ public class DB_Methode
 
     public DB_Methode()
     { 
-        connStr = "server=192.168.19.132;user=olivier;database=PasswordGenerator;password=Frederique43!;"; 
+        connStr = "server=192.168.74.131;user=olivier;database=PasswordGenerator;password=Frederique43!;"; 
         conn = new MySqlConnection(connStr);
         conn.Open();
   
@@ -57,7 +57,8 @@ public class DB_Methode
     
     public bool UpdatePassword(int id, int user_id, String site, String login, String password)
     {
-        sql = "UPDATE passwords SET user_id ='" + user_id + "' ,site = '" + site + "',login = '" + login + "',password = '" + password + "',modified_at = NOW() WHERE id = '" + id + "'";
+        //,modified_at = NOW() -> ajouter juste vant le WHERE
+        sql = "UPDATE passwords SET user_id ='" + user_id + "' ,site = '" + site + "',login = '" + login + "',password = '" + password + "' WHERE id = '" + id + "'";
         var command = new MySqlCommand(sql, conn);
         try
         {
@@ -77,6 +78,7 @@ public class DB_Methode
             return false;
         }
     }
+    
     
     public bool adduser(String username, String fullname , String email, String password)
     {

@@ -16,7 +16,7 @@ public class EncryptAndDecrypt
         return Encrypted;
     }
     
-    public string Decrypt(string key)
+    public static string Decrypt(string key, string Encrypted)
     {
         return new AesCrypter(key).Decrypt(Encrypted);
     }

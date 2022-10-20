@@ -41,13 +41,14 @@ public class PasswordUserDB_Method
         return DB;
     }
 
-    public static void AddPassword(string key, int CurrentUserId, string site, string username, string password)
+    public static void AddPassword(int CurrentUserId, string site, string username, string password)
     {
-        key = currentUser.password;
+        string key = currentUser.password;
         Console.WriteLine(password);
         password = EncryptAndDecrypt.Encrypt(key, password);
         Console.WriteLine(password);
         DB.AddPassword(CurrentUserId, site, username, password);
+        
 
     }
 
@@ -66,32 +67,25 @@ public class PasswordUserDB_Method
                 check1 = Console.ReadLine();
                 if (check1 == "1")
                 {
-                    
-                    Console.WriteLine("Please reenter your account password");
-                    string pwd = Console.ReadLine();
-                    string key = HASH.Sha256(pwd);
-                    //password.Decrypt(key);
-                    Console.WriteLine(" Password: " + password.Password);
-                    //PasswordDB.Encrypt(key);
-                    //passwordAndFileMethod.ShowDecryptPassword(password);
-                                            
+
+                    Decrypt(password);
+
                 }
                 else if (check1 == "2")
                 {
-
-                    //passwordAndFileMethod.EditList(password, passwords);
+                    update(password);
                     check1 = "5";
                 }
 
                 else if (check1 == "3")
                 {
-                    //passwordAndFileMethod.Hide(password);
+                    Hide(password);
                     check1 = "5";
                 }
                                         
                 else if (check1 == "4")
                 {
-                    //passwordAndFileMethod.Delete(passwords, password);
+                    Delete(passwordsDB, password);
                     check1 = "5";
                 }
                 //passwordAndFileMethod.Save(passwords);
@@ -122,25 +116,25 @@ public class PasswordUserDB_Method
                     check1 = Console.ReadLine();
                     if (check1 == "1")
                     {
-                       
-                                            
+                        Decrypt(password);
+
                     }
                     else if (check1 == "2")
                     {
 
-                        //passwordAndFileMethod.EditList(password, passwords);
+                        update(password);
                         check1 = "5";
                     }
 
                     else if (check1 == "3")
                     {
-                        //passwordAndFileMethod.Hide(password);
+                        Hide(password);
                         check1 = "5";
                     }
                                         
                     else if (check1 == "4")
                     {
-                        //passwordAndFileMethod.Delete(passwords, password);
+                        Delete(passwordsDB, password);
                         check1 = "5";
                     }
                     //passwordAndFileMethod.Save(passwords);
@@ -150,9 +144,83 @@ public class PasswordUserDB_Method
         }
         if(find == false)
         {
-            Console.WriteLine("this username does not exist !");
+            Console.WriteLine("this site does not exist !");
             
         }
     }
 
+    public static void Decrypt(PasswordDB password)
+    {
+        try
+        {
+            Console.WriteLine("Please reenter your account password");
+            string pwd = Console.ReadLine();
+            string key = HASH.Sha256(pwd);
+            password.Password = EncryptAndDecrypt.Decrypt(key, password.Password);
+            Console.WriteLine(" Password: " + password.Password);
+            password.Password = EncryptAndDecrypt.Encrypt(key, password.Password);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("this account passord does not match with your account password");
+        }
+    }
+
+    public static void update(PasswordDB password)
+    {
+        Console.WriteLine("do you want update 1 : username, 2 : password, 3 : site");
+        string check2 = Console.ReadLine();
+        if (check2 == "1")
+        {
+            Console.WriteLine("the username you want to update : " + password.login);
+            Console.WriteLine("enter your new username");
+            password.login = Console.ReadLine();
+            Console.WriteLine("your new username : " + password.login);
+            DB.UpdatePassword(password.id, currentUser.id, password.site, password.login, password.Password);
+
+        }
+        else if (check2 == "2")
+        {
+            Console.WriteLine("Please reenter your account password");
+            string pwd = Console.ReadLine();
+            string key = HASH.Sha256(pwd);
+            try
+            {
+                password.Password = EncryptAndDecrypt.Decrypt(key, password.Password);
+                Console.WriteLine("the password you want to update : " + password.Password);
+                Console.WriteLine("a new password will be generate");
+                password.Password = passwordAndFileMethod.RegeneratePassword();
+                Console.WriteLine("Your password has been changed to : " + password.Password);
+                password.Password = EncryptAndDecrypt.Encrypt(key, password.Password);
+                DB.UpdatePassword(password.id, currentUser.id, password.site, password.login, password.Password);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("this account passord does not match with your account password");
+            }
+
+        }
+        
+        else if (check2 == "3")
+        {
+            Console.WriteLine("the site you want to update : " + password.site);
+            Console.WriteLine("enter your new site");
+            password.site = Console.ReadLine();
+            Console.WriteLine("your new site : " + password.site );
+            DB.UpdatePassword(password.id, currentUser.id, password.site, password.login, password.Password);
+        }
+    }
+    
+    public static void Hide(PasswordDB password)
+    {
+        Console.Clear();
+        Console.WriteLine("Username: " + password.login + " Site: " + password.site + " Password: The password is hidden");
+    }
+    
+    public static void Delete(List<PasswordDB> passwords, PasswordDB password)
+    {
+        passwords.Remove(password);
+        DB.DeletePassword(password.id);
+        Console.WriteLine("Your Password is now delete");
+    }
 }

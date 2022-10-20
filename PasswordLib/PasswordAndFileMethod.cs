@@ -8,6 +8,7 @@ namespace PasswordGenerator;
 
 public class passwordAndFileMethod
 {
+    private static List<Password> passwords = new List<Password>();
     private static DB_Methode DB = PasswordUserDB_Method.GetDB();
     private static UserDB CurrentUser = PasswordUserDB_Method.GetUser();
     private static readonly Regex regex = new Regex(@"^\d+$");
@@ -77,7 +78,7 @@ public class passwordAndFileMethod
                 password.Decrypt(key);
                 Console.WriteLine("the password you want to update : " + password.Plaintext);
                 Console.WriteLine("a new password will be generate");
-                password.Plaintext = RegeneratePassword(passwords);
+                password.Plaintext = RegeneratePassword();
                 Console.WriteLine("Your password has been changed to : " + password.Plaintext);
                 password.Encrypt(key);
             }
@@ -178,7 +179,7 @@ public class passwordAndFileMethod
         }
     }
 
-    public static string FirstGeneratePassword(List<Password> passwords)
+    public static string FirstGeneratePassword()
     {
         string path = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? "";
         path = Path.Combine(path, "passwords.json");
@@ -265,7 +266,7 @@ public class passwordAndFileMethod
 
         string password = GeneratorGenerator.Generator(length, lower, hupper, number, symbol);
 
-        PasswordUserDB_Method.AddPassword(CurrentUser.password, CurrentUser.id, site, userName, password);
+        PasswordUserDB_Method.AddPassword(CurrentUser.id, site, userName, password);
         
         if (File.Exists(path))
         {
@@ -282,7 +283,7 @@ public class passwordAndFileMethod
         return password;
     }
     
-    public static string RegeneratePassword(List<Password> passwords)
+    public static string RegeneratePassword()
     {
         string path = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? "";
         path = Path.Combine(path, "passwords.json");
