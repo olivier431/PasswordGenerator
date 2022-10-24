@@ -4,7 +4,7 @@ namespace PasswordGenerator;
 
 public class DB_Methode
 {
-     private string connStr;
+    private string connStr;
     private MySqlConnection conn;
     private string sql;
     

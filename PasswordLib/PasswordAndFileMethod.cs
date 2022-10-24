@@ -14,9 +14,10 @@ public class passwordAndFileMethod
     private static readonly Regex regex = new Regex(@"^\d+$");
     public static List<Password> OpenFile()
     {
+        string username = OfflineMenu.GetUserOffline();
 
         string path = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? "";
-        path = Path.Combine(path, "passwords.json");
+        path = Path.Combine(path, username +".json");
         string json = File.ReadAllText(path);
 
         return JsonConvert.DeserializeObject<List<Password>>(json) ?? new List<Password>();
@@ -46,9 +47,9 @@ public class passwordAndFileMethod
         string key = Console.ReadLine();
         try
         {
-            password.Decrypt(key);
+            password.Plaintext = EncryptAndDecrypt.Decrypt(key, password.Encrypted);
             Console.WriteLine(" Password: " + password.Plaintext);
-            password.Encrypt(key);
+            EncryptAndDecrypt.Encrypt(key, password.Plaintext);
         }
         catch (Exception e)
         {
@@ -75,12 +76,12 @@ public class passwordAndFileMethod
             string key = Console.ReadLine();
             try
             {
-                password.Decrypt(key);
+                password.Plaintext = EncryptAndDecrypt.Decrypt(key, password.Encrypted);
                 Console.WriteLine("the password you want to update : " + password.Plaintext);
                 Console.WriteLine("a new password will be generate");
                 password.Plaintext = RegeneratePassword();
                 Console.WriteLine("Your password has been changed to : " + password.Plaintext);
-                password.Encrypt(key);
+                EncryptAndDecrypt.Encrypt(key, password.Plaintext);
             }
             catch (Exception e)
             {

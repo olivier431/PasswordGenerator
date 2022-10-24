@@ -16,24 +16,11 @@ public class Password
         Site = site;
         UserName = userName;
         Plaintext = plaintext;
-        
-        Encrypt(key);
+
+        EncryptAndDecrypt.Encrypt(key, plaintext);
     }
 
-    public void Encrypt(String key)
-    {
-
-        if (Plaintext != null)
-        {
-            Encrypted = new AesCrypter(key).Encrypt(Plaintext);
-            Plaintext = null;
-        }
-    }
     
-    public void Decrypt(string key)
-    {
-        Plaintext = new AesCrypter(key).Decrypt(Encrypted);
-    }
     
     public override string ToString()
     {

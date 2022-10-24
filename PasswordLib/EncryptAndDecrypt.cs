@@ -2,8 +2,6 @@
 
 public class EncryptAndDecrypt
 {
-  
-    
     public static string Encrypted { get; set; }
     
     public static string Encrypt(String key, string passwordToEncrypt)
