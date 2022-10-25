@@ -8,26 +8,25 @@ namespace PasswordGenerator;
 
 public class passwordAndFileMethod
 {
-    private static List<Password> passwords = new List<Password>();
-    private static DB_Methode DB = PasswordUserDB_Method.GetDB();
-    private static UserDB CurrentUser = PasswordUserDB_Method.GetUser();
+
+    private static DB_Methode DB;
+    private static UserDB CurrentUser;
     private static readonly Regex regex = new Regex(@"^\d+$");
+    static string username = OfflineMenu.GetUserOffline();
+    
     public static List<Password> OpenFile()
     {
-        string username = OfflineMenu.GetUserOffline();
-
         string path = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? "";
-        path = Path.Combine(path, username +".json");
+        path = Path.Combine(path, username + ".json");
         string json = File.ReadAllText(path);
 
         return JsonConvert.DeserializeObject<List<Password>>(json) ?? new List<Password>();
-
     }
 
     public static void Save(List<Password> passwords)
     {
         string path = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? "";
-        path = Path.Combine(path, "passwords.json");
+        path = Path.Combine(path, username + ".json");
         
         JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
         
@@ -43,7 +42,7 @@ public class passwordAndFileMethod
 
     public static void ShowDecryptPassword(Password password)
     {
-        Console.WriteLine("What is your MasterKey ?");
+        Console.WriteLine("What is your online account password ?");
         string key = Console.ReadLine();
         try
         {
@@ -53,7 +52,7 @@ public class passwordAndFileMethod
         }
         catch (Exception e)
         {
-            Console.WriteLine("This MasterKey does not exist");
+            Console.WriteLine("This is not your account password");
         }
         
     }
@@ -72,7 +71,7 @@ public class passwordAndFileMethod
         }
         else if(check2 == "2")
         {
-            Console.WriteLine("What is your MasterKey ?");
+            Console.WriteLine("What is your online account password ?");
             string key = Console.ReadLine();
             try
             {
@@ -85,7 +84,7 @@ public class passwordAndFileMethod
             }
             catch (Exception e)
             {
-                Console.WriteLine("This MasterKey does not exist");
+                Console.WriteLine("This is not your account password");
             }
             
         }
@@ -119,6 +118,37 @@ public class passwordAndFileMethod
             count++;
             
             Console.WriteLine("Password # " + count + " Username: " + password.UserName + " Site: " + password.Site + " Password: " + password.Encrypted);
+            string check1;
+            do
+            {
+                Console.WriteLine("do you want 1: decrypt, 2 : update, 3 : hide the password decrypte 4 : delete, 5 :  quit ");
+                check1 = Console.ReadLine();
+                if (check1 == "1")
+                {
+                    passwordAndFileMethod.ShowDecryptPassword(password);
+                                            
+                }
+                else if (check1 == "2")
+                {
+
+                    passwordAndFileMethod.EditList(password, passwords);
+                    check1 = "5";
+                }
+
+                else if (check1 == "3")
+                {
+                    passwordAndFileMethod.Hide(password);
+                    check1 = "5";
+                }
+                                        
+                else if (check1 == "4")
+                {
+                    passwordAndFileMethod.Delete(passwords, password);
+                    check1 = "5";
+                }
+                passwordAndFileMethod.Save(passwords);
+                                        
+            } while (check1 != "5");
         }
 
         if (count == 0)
@@ -131,7 +161,6 @@ public class passwordAndFileMethod
     {
         Console.WriteLine("type the site associated with your password");
         string site = Console.ReadLine();
-        passwords = passwordAndFileMethod.OpenFile();
         bool find = false;
         int count = 0;
         foreach (Password password in passwords.ToList())
@@ -183,13 +212,14 @@ public class passwordAndFileMethod
     public static string FirstGeneratePassword()
     {
         string path = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? "";
-        path = Path.Combine(path, "passwords.json");
+        path = Path.Combine(path, username + ".json");
         string site = "";
         string userName = "";
-        string masterPassword = "";
         bool hupper, lower, number, symbol;
         Console.WriteLine("What is your Username ?");
         userName = Console.ReadLine();
+        Console.WriteLine("What is your your online account password ?");
+        string key = Console.ReadLine();
                     
         Console.WriteLine("For wich site do you want to register a password ?");
         site = Console.ReadLine();
@@ -267,17 +297,25 @@ public class passwordAndFileMethod
 
         string password = GeneratorGenerator.Generator(length, lower, hupper, number, symbol);
 
-        PasswordUserDB_Method.AddPassword(CurrentUser.id, site, userName, password);
+        if (MainMenu.GetStatus())
+        {
+            DB = PasswordUserDB_Method.GetDB();
+            CurrentUser = PasswordUserDB_Method.GetUser();
+            
+            PasswordUserDB_Method.AddPassword(CurrentUser.id, site, userName, password, key);
+        }
         
         if (File.Exists(path))
         {
-            passwords = passwordAndFileMethod.OpenFile();
-            passwords.Add(passwordAndFileMethod.AddPassword(password, masterPassword, userName, site));
+            List<Password> passwords = OpenFile();
+            passwords.Add(passwordAndFileMethod.AddPassword(password, key, userName, site));
             
             passwordAndFileMethod.Save(passwords);
         }
         else
         {
+            List<Password> passwords = new List<Password>();
+            passwords.Add(passwordAndFileMethod.AddPassword(password, key, userName, site));
             passwordAndFileMethod.Save(passwords);
         }
 
@@ -287,7 +325,7 @@ public class passwordAndFileMethod
     public static string RegeneratePassword()
     {
         string path = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? "";
-        path = Path.Combine(path, "passwords.json");
+        path = Path.Combine(path, username + ".json");
         bool hupper, lower, number, symbol;
         Console.WriteLine("Do you want lowerLetter ?");
         string choice = Console.ReadLine();
@@ -360,9 +398,11 @@ public class passwordAndFileMethod
             } while (!regex.IsMatch(TempoBuffer) || (length < 8 || length > 64));
         }
         string password = GeneratorGenerator.Generator(length, lower, hupper, number, symbol);
-        
+        List<Password> passwords = OpenFile();
         passwordAndFileMethod.Save(passwords);
         
         return password;
     }
+    
+    
 }

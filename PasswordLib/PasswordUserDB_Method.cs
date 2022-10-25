@@ -41,15 +41,13 @@ public class PasswordUserDB_Method
         return DB;
     }
 
-    public static void AddPassword(int CurrentUserId, string site, string username, string password)
+    public static void AddPassword(int CurrentUserId, string site, string username, string password, string key)
     {
-        string key = currentUser.password;
+        key = currentUser.password;
         Console.WriteLine(password);
         password = EncryptAndDecrypt.Encrypt(key, password);
         Console.WriteLine(password);
         DB.AddPassword(CurrentUserId, site, username, password);
-        
-
     }
 
     public static void ListDBPassword()
@@ -88,8 +86,7 @@ public class PasswordUserDB_Method
                     Delete(passwordsDB, password);
                     check1 = "5";
                 }
-                //passwordAndFileMethod.Save(passwords);
-                                        
+
             } while (check1 != "5");
         }
     }

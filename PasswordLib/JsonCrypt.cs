@@ -10,6 +10,7 @@ public class Password
     [System.Text.Json.Serialization.JsonIgnore] public string? Plaintext;
     public string Encrypted { get; set; }
     public string? Site { get; set; }
+    
 
     public Password(string plaintext, string key, string userName, string? site = null)
     {
@@ -17,7 +18,7 @@ public class Password
         UserName = userName;
         Plaintext = plaintext;
 
-        EncryptAndDecrypt.Encrypt(key, plaintext);
+        Encrypted = EncryptAndDecrypt.Encrypt(key, plaintext);
     }
 
     

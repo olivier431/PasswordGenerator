@@ -4,9 +4,11 @@ public class OfflineMenu
 {
 
     private static string username;
+    
     public static void Offline()
     {
         string answer;
+        
 
         Console.WriteLine("What is your online username ?");
         username = Console.ReadLine();
@@ -30,11 +32,13 @@ public class OfflineMenu
                     check = Console.ReadLine();
                     if (check == "1")
                     {
-                        PasswordUserDB_Method.ListDBPasswordBySite();
+                        List<Password> passwords = passwordAndFileMethod.OpenFile();
+                        passwordAndFileMethod.ListPasswordBySite(passwords);
                     }
                     else if (check == "2")
                     {
-                        PasswordUserDB_Method.ListDBPassword();
+                        List<Password> passwords = passwordAndFileMethod.OpenFile();
+                        passwordAndFileMethod.ListPassword(passwords);
                         check = "3";
                     }
                 } while (check != "3");
