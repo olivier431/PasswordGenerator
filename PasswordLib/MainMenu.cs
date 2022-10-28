@@ -2,9 +2,11 @@
 
 public class MainMenu
 {
-    static bool Online = true;
+    public static bool Online { get; set; }
+     
     public static void Menu()
     {
+        
         Console.WriteLine("what mode do you want to be in? 1: Online or 2: Offline ? ");
         string choice = Console.ReadLine();
         if (choice == "1")

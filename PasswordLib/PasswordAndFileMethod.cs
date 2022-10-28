@@ -35,15 +35,16 @@ public class passwordAndFileMethod
         File.WriteAllText(path, json);
     }
 
-    public static Password AddPassword(string plaintext, string key, string userName, string? site = null)
+    public static Password AddPassword(string plaintext, string key, string userName, DateTime createdAt, DateTime modifiedAt, string? site = null)
     {
-        return new Password(plaintext, key, userName, site);
+        return new Password(plaintext, key, userName, createdAt, modifiedAt, site);
     }
 
     public static void ShowDecryptPassword(Password password)
     {
         Console.WriteLine("What is your online account password ?");
-        string key = Console.ReadLine();
+        string keynoHASH = Console.ReadLine();
+        string key = HASH.Sha256(keynoHASH);
         try
         {
             password.Plaintext = EncryptAndDecrypt.Decrypt(key, password.Encrypted);
@@ -79,6 +80,7 @@ public class passwordAndFileMethod
                 Console.WriteLine("the password you want to update : " + password.Plaintext);
                 Console.WriteLine("a new password will be generate");
                 password.Plaintext = RegeneratePassword();
+                password.ModifiedAt = Convert.ToDateTime(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")); 
                 Console.WriteLine("Your password has been changed to : " + password.Plaintext);
                 EncryptAndDecrypt.Encrypt(key, password.Plaintext);
             }
@@ -211,15 +213,23 @@ public class passwordAndFileMethod
 
     public static string FirstGeneratePassword()
     {
-        string path = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? "";
-        path = Path.Combine(path, username + ".json");
+        string path = "";
+        if (MainMenu.GetStatus() == false)
+        {
+            path = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? "";
+            path = Path.Combine(path, username + ".json");
+        }
         string site = "";
         string userName = "";
+        string key = "";
         bool hupper, lower, number, symbol;
         Console.WriteLine("What is your Username ?");
         userName = Console.ReadLine();
-        Console.WriteLine("What is your your online account password ?");
-        string key = Console.ReadLine();
+        if (MainMenu.GetStatus() == false)
+        {
+            Console.WriteLine("What is your your online account password ?");
+            key = Console.ReadLine();
+        }
                     
         Console.WriteLine("For wich site do you want to register a password ?");
         site = Console.ReadLine();
@@ -305,27 +315,30 @@ public class passwordAndFileMethod
             PasswordUserDB_Method.AddPassword(CurrentUser.id, site, userName, password, key);
         }
         
-        if (File.Exists(path))
+        if (File.Exists(path) && MainMenu.GetStatus() == false)
         {
+            DateTime createdAt = Convert.ToDateTime(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
+            DateTime modifiedAt = Convert.ToDateTime(new DateTime().ToString("yyyy/MM/dd HH:mm:ss"));
             List<Password> passwords = OpenFile();
-            passwords.Add(passwordAndFileMethod.AddPassword(password, key, userName, site));
+            passwords.Add(passwordAndFileMethod.AddPassword(password, key, userName, createdAt, modifiedAt, site));
             
             passwordAndFileMethod.Save(passwords);
         }
-        else
+        else if (!File.Exists(path) && MainMenu.GetStatus() == false)
         {
+            DateTime createdAt = Convert.ToDateTime(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
+            DateTime modifiedAt = Convert.ToDateTime(new DateTime().ToString("yyyy/MM/dd HH:mm:ss"));  
             List<Password> passwords = new List<Password>();
-            passwords.Add(passwordAndFileMethod.AddPassword(password, key, userName, site));
+            passwords.Add(passwordAndFileMethod.AddPassword(password, key, userName, createdAt, modifiedAt, site));
             passwordAndFileMethod.Save(passwords);
         }
+        
 
         return password;
     }
     
     public static string RegeneratePassword()
     {
-        string path = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? "";
-        path = Path.Combine(path, username + ".json");
         bool hupper, lower, number, symbol;
         Console.WriteLine("Do you want lowerLetter ?");
         string choice = Console.ReadLine();
@@ -398,8 +411,6 @@ public class passwordAndFileMethod
             } while (!regex.IsMatch(TempoBuffer) || (length < 8 || length > 64));
         }
         string password = GeneratorGenerator.Generator(length, lower, hupper, number, symbol);
-        List<Password> passwords = OpenFile();
-        passwordAndFileMethod.Save(passwords);
         
         return password;
     }

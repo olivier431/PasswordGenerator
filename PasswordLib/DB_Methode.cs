@@ -11,7 +11,7 @@ public class DB_Methode
 
     public DB_Methode()
     { 
-        connStr = "server=192.168.74.131;user=olivier;database=PasswordGenerator;password=Frederique43!;"; 
+        connStr = "server=192.168.74.131;user=olivier;database=PasswordGenerator;password=Frederique43!;Convert Zero Datetime=True"; 
         conn = new MySqlConnection(connStr);
         conn.Open();
   
@@ -57,8 +57,8 @@ public class DB_Methode
     
     public bool UpdatePassword(int id, int user_id, String site, String login, String password)
     {
-        //,modified_at = NOW() -> ajouter juste vant le WHERE
-        sql = "UPDATE passwords SET user_id ='" + user_id + "' ,site = '" + site + "',login = '" + login + "',password = '" + password + "' WHERE id = '" + id + "'";
+        
+        sql = "UPDATE passwords SET user_id ='" + user_id + "' ,site = '" + site + "',login = '" + login + "',password = '" + password + "',ModifiedAt = NOW() WHERE id = '" + id + "'";
         var command = new MySqlCommand(sql, conn);
         try
         {
@@ -141,7 +141,7 @@ public class DB_Methode
             var reader = cmd.ExecuteReader();
             while(reader.Read())
             {
-                user_Password.Add(new PasswordDB(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4)));
+                user_Password.Add(new PasswordDB(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetDateTime(5), reader.GetDateTime(6)));
             }
             reader.Close();        
         }
@@ -158,7 +158,7 @@ public class DB_Methode
             var reader = cmd.ExecuteReader();
             while(reader.Read())
             {
-                user_Password.Add(new PasswordDB(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4)));
+                user_Password.Add(new PasswordDB(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetDateTime(5), reader.GetDateTime(6)));
             }
             reader.Close();        
         }
