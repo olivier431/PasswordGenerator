@@ -8,8 +8,8 @@ public class OfflineMenu
     public static void Offline()
     {
         string answer;
-        
 
+        MainMenu.Online = false;
         Console.WriteLine("What is your online username ?");
         username = Console.ReadLine();
         

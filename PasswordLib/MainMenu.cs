@@ -12,6 +12,7 @@ public class MainMenu
         if (choice == "1")
         {
             OnlineMenu.Online();
+           
         }
         else if (choice == "2")
         {

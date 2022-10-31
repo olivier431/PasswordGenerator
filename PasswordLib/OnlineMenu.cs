@@ -4,6 +4,7 @@ public class OnlineMenu
 {
     public static void Online()
     {
+        MainMenu.Online = true;
         string answer;
         string CheckInscription = "";
         UserDB currentUser = PasswordUserDB_Method.GetUser();
@@ -33,6 +34,8 @@ public class OnlineMenu
 
         if (currentUser.id != -1)
         {
+            Sync.Synchronisation();
+            Console.WriteLine(MainMenu.GetStatus());
             Console.WriteLine("Welcome " + currentUser.login + " you are now connect in the Online Mode ! ");
                 
             do

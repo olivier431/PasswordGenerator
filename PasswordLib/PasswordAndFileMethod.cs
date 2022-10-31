@@ -17,7 +17,17 @@ public class passwordAndFileMethod
     public static List<Password> OpenFile()
     {
         string path = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? "";
-        path = Path.Combine(path, username + ".json");
+        if (MainMenu.GetStatus() == false)
+        {
+            path = Path.Combine(path, username + ".json");
+            
+        }
+        else if (MainMenu.GetStatus() == true)
+        {
+            CurrentUser = PasswordUserDB_Method.GetUser();
+            path = Path.Combine(path, CurrentUser.login + ".json");
+            Console.WriteLine(path);
+        }
         string json = File.ReadAllText(path);
 
         return JsonConvert.DeserializeObject<List<Password>>(json) ?? new List<Password>();
