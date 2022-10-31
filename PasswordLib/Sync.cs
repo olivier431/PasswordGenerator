@@ -21,8 +21,6 @@ public class Sync
             if (pswdOff.id == 0)
             {
                 DB.AddPassword(CurrentUser.id, pswdOff.Site, pswdOff.UserName, pswdOff.Encrypted);
-                
-                
                 CurrentPasswordsOnline = DB.GetUserPasswords(CurrentUser.id);
                 pswdOff.id = CurrentPasswordsOnline.Last().id;
             }

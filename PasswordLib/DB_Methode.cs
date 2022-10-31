@@ -35,7 +35,7 @@ public class DB_Methode
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Console.WriteLine("Le Password pour ce site : "  + site + " avec ce username : " + login + " est deja en DB");
             return false;
         }
     }
