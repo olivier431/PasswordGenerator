@@ -54,7 +54,7 @@ public class PasswordUserDB_Method
     {
         int count = 0;
         List<PasswordDB> passwordsDB = DB.GetUserPasswords(currentUser.id);
-        foreach (var password in passwordsDB)
+        foreach (var password in passwordsDB.ToList())
         {
             count++;
             Console.WriteLine("Password # " + count + " Username: " + password.login + " Site: " + password.site + " Password: " + password.Password);

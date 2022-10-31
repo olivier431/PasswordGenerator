@@ -13,8 +13,9 @@ public class Password
     public string UserName { get; set; }
     
     [System.Text.Json.Serialization.JsonIgnore] public string? Plaintext;
-    
-    [System.Text.Json.Serialization.JsonIgnore] public int id = 0;
+
+    [System.Text.Json.Serialization.JsonIgnore] public int id { get; set; } = 0;  
+      
     public string Encrypted { get; set; }
     public string? Site { get; set; }
     

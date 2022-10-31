@@ -9,38 +9,27 @@ public class Sync
     private static UserDB CurrentUser = PasswordUserDB_Method.GetUser();
     public static void Synchronisation()
     {
-        List<Password> CurrentPasswordsOffline = new List<Password>();
-        CurrentPasswordsOffline = passwordAndFileMethod.OpenFile();
-        
-        List<PasswordDB> CurrentPasswordsOnline = new List<PasswordDB>();
+       
+        List<Password> CurrentPasswordsOffline =  passwordAndFileMethod.OpenFile();
 
-        CurrentPasswordsOnline = DB.GetUserPasswords(CurrentUser.id);
+        List<PasswordDB> CurrentPasswordsOnline = DB.GetUserPasswords(CurrentUser.id);
 
         foreach (var pswdOff in CurrentPasswordsOffline)
         {
-            if (pswdOff.id == 0)
+            foreach (var pswdoOn in CurrentPasswordsOnline)
             {
-                DB.AddPassword(CurrentUser.id, pswdOff.Site, pswdOff.UserName, pswdOff.Encrypted);
-                CurrentPasswordsOnline = DB.GetUserPasswords(CurrentUser.id);
-                pswdOff.id = CurrentPasswordsOnline.Last().id;
-            }
-
-            else
-            {
-                var db = CurrentPasswordsOnline.Find(x => x.id == pswdOff.id);
-
-                if (pswdOff.ModifiedAt > db.ModifiedAt)
+                if ((pswdOff.Site == pswdoOn.site) && (pswdOff.UserName == pswdoOn.login) && (pswdOff.id != 0))
                 {
-                    DB.UpdatePassword(pswdOff.id,CurrentUser.id, pswdOff.Site, pswdOff.UserName, pswdOff.Encrypted);
+                    Console.WriteLine("password in the DB");
+                }
+                else
+                {
+                    DB.AddPassword(CurrentUser.id, pswdOff.Site, pswdOff.UserName, pswdOff.Encrypted);
+                    CurrentPasswordsOnline = DB.GetUserPasswords(CurrentUser.id);
+                    pswdOff.id = CurrentPasswordsOnline.Last().id;
                 }
             }
-            
         }
- 
-        
-        
-        
-
     }
 
 }

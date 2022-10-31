@@ -4,6 +4,7 @@ public class OnlineMenu
 {
     public static void Online()
     {
+        string path = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? "";
         MainMenu.Online = true;
         string answer;
         string CheckInscription = "";
@@ -34,8 +35,12 @@ public class OnlineMenu
 
         if (currentUser.id != -1)
         {
-            Sync.Synchronisation();
-            Console.WriteLine(MainMenu.GetStatus());
+            path = Path.Combine(path, currentUser.login + ".json");
+            if (File.Exists(path))
+            {
+                Sync.Synchronisation();
+            }
+            
             Console.WriteLine("Welcome " + currentUser.login + " you are now connect in the Online Mode ! ");
                 
             do

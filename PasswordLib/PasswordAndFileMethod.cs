@@ -83,7 +83,8 @@ public class passwordAndFileMethod
         else if(check2 == "2")
         {
             Console.WriteLine("What is your online account password ?");
-            string key = Console.ReadLine();
+            string key1 = Console.ReadLine();
+            string key = HASH.Sha256(key1);
             try
             {
                 password.Plaintext = EncryptAndDecrypt.Decrypt(key, password.Encrypted);
@@ -92,7 +93,7 @@ public class passwordAndFileMethod
                 password.Plaintext = RegeneratePassword();
                 password.ModifiedAt = Convert.ToDateTime(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")); 
                 Console.WriteLine("Your password has been changed to : " + password.Plaintext);
-                EncryptAndDecrypt.Encrypt(key, password.Plaintext);
+                password.Encrypted = EncryptAndDecrypt.Encrypt(key, password.Plaintext);
             }
             catch (Exception e)
             {
@@ -125,7 +126,7 @@ public class passwordAndFileMethod
     public static void ListPassword(List<Password> passwords)
     {
         int count = 0;
-        foreach (Password password in passwords)
+        foreach (Password password in passwords.ToList())
         {
             count++;
             
@@ -231,6 +232,7 @@ public class passwordAndFileMethod
         }
         string site = "";
         string userName = "";
+        string key1 = "";
         string key = "";
         bool hupper, lower, number, symbol;
         Console.WriteLine("What is your Username ?");
@@ -238,7 +240,8 @@ public class passwordAndFileMethod
         if (MainMenu.GetStatus() == false)
         {
             Console.WriteLine("What is your your online account password ?");
-            key = Console.ReadLine();
+            key1 = Console.ReadLine();
+            key = HASH.Sha256(key1);
         }
                     
         Console.WriteLine("For wich site do you want to register a password ?");
