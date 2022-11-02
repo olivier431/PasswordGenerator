@@ -134,7 +134,7 @@ public class passwordAndFileMethod
             string check1;
             do
             {
-                Console.WriteLine("do you want 1: decrypt, 2 : update, 3 : hide the password decrypte 4 : delete, 5 :  quit ");
+                Console.WriteLine("do you want 1: decrypt, 2 : update, 3 : hide the password decrypte 4 : delete, 5 :  quit/skip ");
                 check1 = Console.ReadLine();
                 if (check1 == "1")
                 {
@@ -186,7 +186,7 @@ public class passwordAndFileMethod
                 string check1;
                 do
                 {
-                    Console.WriteLine("do you want 1: decrypt, 2 : update, 3 : hide the password decrypte 4 : delete, 5 :  quit ");
+                    Console.WriteLine("do you want 1: decrypt, 2 : update, 3 : hide the password decrypte 4 : delete, 5 :  quit/skip ");
                     check1 = Console.ReadLine();
                     if (check1 == "1")
                     {

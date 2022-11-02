@@ -28,8 +28,10 @@ public class PasswordVerification
                 Console.WriteLine("Warning! Your password is less than 8 in length : " + pswd.login + " " + pswd.site + " " + pswd.Password);
                 longeurNoOk++;
             }
-
-            if ((pswd.CreatedAt.Month - DateTime.Now.Month) > month)
+            int Month = pswd.CreatedAt.Month - DateTime.Now.Month;
+            int Year = pswd.CreatedAt.Year - DateTime.Now.Year;
+            Month += Year * 12;
+            if (Month > month)
             {
                 Console.WriteLine("Please note that your password is more than 6 months old : " + pswd.login + " " + pswd.site + " " + pswd.Password);
                 moisNoOk = 0;
@@ -57,8 +59,10 @@ public class PasswordVerification
                 Console.WriteLine("Warning! Your password is less than 8 in length : " + pswd.UserName + " " + pswd.Site + " " + pswd.Encrypted);
                 longeurNoOk++;
             }
-
-            if ((pswd.CreatedAt.Month - DateTime.Now.Month) > month)
+            int Month = pswd.CreatedAt.Month - DateTime.Now.Month;
+            int Year = pswd.CreatedAt.Year - DateTime.Now.Year;
+            Month += Year * 12;
+            if (Month > month)
             {
                 Console.WriteLine("Please note that your password is more than 6 months old : " + pswd.UserName + " " + pswd.Site + " " + pswd.Encrypted);
                 moisNoOk++;

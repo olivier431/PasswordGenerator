@@ -83,7 +83,7 @@ public class PasswordUserDB_Method
                                         
                 else if (check1 == "4")
                 {
-                    Delete(passwordsDB, password);
+                    Delete(password);
                     check1 = "5";
                 }
 
@@ -93,56 +93,53 @@ public class PasswordUserDB_Method
 
     public static void ListDBPasswordBySite()
     {
-        List<PasswordDB> passwordsDB = DB.GetUserPasswords(currentUser.id);
+        
         Console.WriteLine("type the site associated with your password");
         string site = Console.ReadLine();
         bool find = false;
         int count = 0;
-        
-        foreach (var password in passwordsDB.ToList())
+        List<PasswordDB> passwordsDBSite = DB.GetUserPasswordsBySite(currentUser.id, site);
+        foreach (var password in passwordsDBSite.ToList())
         {
-            if (password.site.Equals(site))
+            count++;
+            find = true;
+            Console.WriteLine("Password # " + count +" Username: " + password.login + " Site: " + password.site +  " Password: " + password.Password);
+            string check1;
+            do
             {
-                count++;
-                find = true;
-                Console.WriteLine("Password # " + count +" Username: " + password.login + " Site: " + password.site +  " Password: " + password.Password);
-                string check1;
-                do
+                Console.WriteLine("do you want 1: decrypt, 2 : update, 3 : hide the password decrypte 4 : delete, 5 :  quit ");
+                check1 = Console.ReadLine();
+                if (check1 == "1")
                 {
-                    Console.WriteLine("do you want 1: decrypt, 2 : update, 3 : hide the password decrypte 4 : delete, 5 :  quit ");
-                    check1 = Console.ReadLine();
-                    if (check1 == "1")
-                    {
-                        Decrypt(password);
+                    Decrypt(password);
 
-                    }
-                    else if (check1 == "2")
-                    {
+                }
+                else if (check1 == "2")
+                {
 
-                        update(password);
-                        check1 = "5";
-                    }
+                    update(password);
+                    check1 = "5";
+                }
 
-                    else if (check1 == "3")
-                    {
-                        Hide(password);
-                        check1 = "5";
-                    }
+                else if (check1 == "3")
+                {
+                    Hide(password);
+                    check1 = "5";
+                }
                                         
-                    else if (check1 == "4")
-                    {
-                        Delete(passwordsDB, password);
-                        check1 = "5";
-                    }
-                    //passwordAndFileMethod.Save(passwords);
+                else if (check1 == "4")
+                {
+                    Delete(password);
+                    check1 = "5";
+                }
+                //passwordAndFileMethod.Save(passwords);
                                         
-                } while (check1 != "5");
-            }
+            } while (check1 != "5");
+            
         }
         if(find == false)
         {
             Console.WriteLine("this site does not exist !");
-            
         }
     }
 
@@ -214,9 +211,8 @@ public class PasswordUserDB_Method
         Console.WriteLine("Username: " + password.login + " Site: " + password.site + " Password: The password is hidden");
     }
     
-    public static void Delete(List<PasswordDB> passwords, PasswordDB password)
+    public static void Delete(PasswordDB password)
     {
-        passwords.Remove(password);
         DB.DeletePassword(password.id);
         Console.WriteLine("Your Password is now delete");
     }

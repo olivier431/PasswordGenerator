@@ -11,7 +11,7 @@ public class DB_Methode
 
     public DB_Methode()
     { 
-        connStr = "server=192.168.74.131;user=olivier;database=PasswordGenerator;password=Frederique43!;Convert Zero Datetime=True"; 
+        connStr = "server=192.168.19.132;user=olivier;database=PasswordGenerator;password=Frederique43!;Convert Zero Datetime=True"; 
         conn = new MySqlConnection(connStr);
         conn.Open();
   
