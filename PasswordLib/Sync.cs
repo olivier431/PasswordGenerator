@@ -13,21 +13,50 @@ public class Sync
         List<Password> CurrentPasswordsOffline =  passwordAndFileMethod.OpenFile();
 
         List<PasswordDB> CurrentPasswordsOnline = DB.GetUserPasswords(CurrentUser.id);
-
         foreach (var pswdOff in CurrentPasswordsOffline)
         {
+            int find = 0;
             foreach (var pswdoOn in CurrentPasswordsOnline)
             {
-                if ((pswdOff.Site == pswdoOn.site) && (pswdOff.UserName == pswdoOn.login) && (pswdOff.id != 0))
+                if ((pswdOff.Site == pswdoOn.site) && (pswdOff.UserName == pswdoOn.login) && (pswdoOn.user_id == CurrentUser.id))
                 {
-                    Console.WriteLine("password in the DB");
-                }
-                else
+                    
+                    if (pswdOff.ModifiedAt > pswdoOn.ModifiedAt)
+                    {
+                        DB.UpdatePassword(pswdOff.id, CurrentUser.id, pswdOff.Site, pswdOff.UserName, pswdOff.Encrypted);
+                    }
+                    else if (pswdOff.ModifiedAt < pswdoOn.ModifiedAt)
+                    {
+                        pswdOff.Encrypted = pswdoOn.Password;
+                        pswdOff.Site = pswdoOn.site;
+                        pswdOff.UserName = pswdoOn.login;
+                    }
+
+                    find++;
+                }   
+
+            }
+
+            if (find != 1)
+            {
+                DB.AddPassword(CurrentUser.id, pswdOff.Site, pswdOff.UserName, pswdOff.Encrypted);
+            }
+        }
+
+        foreach (var pswdOn in CurrentPasswordsOnline)
+        {
+            int find = 0;
+            foreach (var pswdOff in CurrentPasswordsOffline)
+            {
+                if ((pswdOff.Site == pswdOn.site) && (pswdOff.UserName == pswdOn.login))
                 {
-                    DB.AddPassword(CurrentUser.id, pswdOff.Site, pswdOff.UserName, pswdOff.Encrypted);
-                    CurrentPasswordsOnline = DB.GetUserPasswords(CurrentUser.id);
-                    pswdOff.id = CurrentPasswordsOnline.Last().id;
+                    find++;
                 }
+                
+            }
+            if (find != 1)
+            {
+                passwordAndFileMethod.AddPassword(pswdOn.Password, CurrentUser.password, pswdOn.login, pswdOn.CreatedAt, pswdOn.ModifiedAt, pswdOn.site);
             }
         }
     }
