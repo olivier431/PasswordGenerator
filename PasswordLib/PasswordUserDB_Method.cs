@@ -4,8 +4,8 @@ namespace PasswordGenerator;
 
 public class PasswordUserDB_Method
 {
-    static DB_Methode DB = new DB_Methode();
-    static UserDB currentUser = new UserDB(-1);
+    private static DB_Methode DB = new DB_Methode();
+    private static UserDB currentUser = new UserDB(-1);
     public static UserDB Connection()
     {
         Console.WriteLine("What is your username?");
@@ -61,7 +61,7 @@ public class PasswordUserDB_Method
             string check1;
             do
             {
-                Console.WriteLine("do you want 1: decrypt, 2 : update, 3 : hide the password decrypte 4 : delete, 5 :  quit ");
+                Console.WriteLine("do you want 1: decrypt, 2 : update, 3 : hide the password decrypte 4 : delete, 5 :  quit/skip ");
                 check1 = Console.ReadLine();
                 if (check1 == "1")
                 {
@@ -107,7 +107,7 @@ public class PasswordUserDB_Method
             string check1;
             do
             {
-                Console.WriteLine("do you want 1: decrypt, 2 : update, 3 : hide the password decrypte 4 : delete, 5 :  quit ");
+                Console.WriteLine("do you want 1: decrypt, 2 : update, 3 : hide the password decrypte 4 : delete, 5 :  quit/skip ");
                 check1 = Console.ReadLine();
                 if (check1 == "1")
                 {
