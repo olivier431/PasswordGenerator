@@ -4,7 +4,7 @@ public class EncryptAndDecrypt
 {
     public static string Encrypted { get; set; }
     
-    public static string Encrypt(String key, string passwordToEncrypt)
+    public static string Encrypt(string key, string passwordToEncrypt)
     {
         if (passwordToEncrypt != null)
         {

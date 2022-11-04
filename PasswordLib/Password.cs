@@ -5,11 +5,6 @@ namespace PasswordGenerator;
 
 public class Password
 {
-    public static Password Add(int id, string plaintext, string key, string userName, DateTime createdAt, DateTime modifiedAt, string? site = null)
-    {
-        return new Password(plaintext, key, userName, createdAt, modifiedAt, site);
-    }
-
     public string UserName { get; set; }
     
     [System.Text.Json.Serialization.JsonIgnore] public string? Plaintext;
@@ -32,6 +27,11 @@ public class Password
         CreatedAt = createdAt;
         ModifiedAt = modifiedAt;
         Encrypted = EncryptAndDecrypt.Encrypt(key, plaintext);
+    }
+    
+    public static Password Add(int id, string plaintext, string key, string userName, DateTime createdAt, DateTime modifiedAt, string? site = null)
+    {
+        return new Password(plaintext, key, userName, createdAt, modifiedAt, site);
     }
     
     public override string ToString()
